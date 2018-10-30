@@ -6,7 +6,7 @@ public interface UserDAO {
 
 	User login (String username, String password);
 	int getUserId(String username);
-	User createUser(String username, String password, 
+	boolean createUser(String username, String password, 
             String  firstname, String lastname, 
             String email, int roleId);
 }

@@ -22,7 +22,7 @@ public class ReimbursementsDAOImpl implements ReimbursementsDAO{
 	}
 
 	@Override
-	public ArrayList<Reimbursements> viewAllReimbursements(int roleId) {
+	public ArrayList<Reimbursements> viewAllReimbursements(int userId) {
 		// TODO Auto-generated method stub
 		return null;
 	}

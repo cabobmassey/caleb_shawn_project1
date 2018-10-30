@@ -1,5 +1,7 @@
 package revature.project1.models;
 
+import revature.project1.userroles.UserRoles;
+
 public class User {
 	
 	private int userId;
@@ -8,10 +10,12 @@ public class User {
 	private String firstName;
 	private String lastName;
 	private String email;
-	private int userRoleId;
+	private UserRoles userRoleId;
 	
+	public User() {}
+
 	public User(int userId, String username, String password, String firstName, String lastName, String email,
-			int userRoleId) {
+			UserRoles userRoleId) {
 		super();
 		this.userId = userId;
 		this.username = username;
@@ -21,86 +25,66 @@ public class User {
 		this.email = email;
 		this.userRoleId = userRoleId;
 	}
-	
+
+	@Override
+	public String toString() {
+		return "User [userId=" + userId + ", username=" + username + ", password=" + password + ", firstName="
+				+ firstName + ", lastName=" + lastName + ", email=" + email + ", userRoleId=" + userRoleId + "]";
+	}
+
 	public int getUserId() {
 		return userId;
 	}
-
-
 
 	public void setUserId(int userId) {
 		this.userId = userId;
 	}
 
-
-
 	public String getUsername() {
 		return username;
 	}
-
-
 
 	public void setUsername(String username) {
 		this.username = username;
 	}
 
-
-
 	public String getPassword() {
 		return password;
 	}
-
-
 
 	public void setPassword(String password) {
 		this.password = password;
 	}
 
-
-
 	public String getFirstName() {
 		return firstName;
 	}
-
-
 
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}
 
-
-
 	public String getLastName() {
 		return lastName;
 	}
-
-
 
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
 
-
-
 	public String getEmail() {
 		return email;
 	}
-
-
 
 	public void setEmail(String email) {
 		this.email = email;
 	}
 
-
-
-	public int getUserRoleId() {
+	public UserRoles getUserRoleId() {
 		return userRoleId;
 	}
 
-
-
-	public void setUserRoleId(int userRoleId) {
+	public void setUserRoleId(UserRoles userRoleId) {
 		this.userRoleId = userRoleId;
 	}
 
@@ -113,11 +97,11 @@ public class User {
 		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
 		result = prime * result + ((password == null) ? 0 : password.hashCode());
 		result = prime * result + userId;
-		result = prime * result + userRoleId;
+		result = prime * result + ((userRoleId == null) ? 0 : userRoleId.hashCode());
 		result = prime * result + ((username == null) ? 0 : username.hashCode());
 		return result;
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -158,11 +142,6 @@ public class User {
 			return false;
 		return true;
 	}
-
-	@Override
-	public String toString() {
-		return "Users [userId=" + userId + ", username=" + username + ", password=" + password + ", firstName="
-				+ firstName + ", lastName=" + lastName + ", email=" + email + ", userRoleId=" + userRoleId + "]";
-	}
+	
 	
 }

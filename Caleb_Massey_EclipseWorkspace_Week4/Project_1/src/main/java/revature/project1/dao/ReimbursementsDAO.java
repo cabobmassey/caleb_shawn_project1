@@ -12,7 +12,7 @@ public interface ReimbursementsDAO {
 	boolean addReimbursementRequest(double amount, Date submitted,
 									Date resolved, String description, InputStream receipt,
 									int author, int resolver, int statusId, int typeId);
-	ArrayList<Reimbursements> viewAllReimbursements(int roleId);
+	ArrayList<Reimbursements> viewAllReimbursements(int userId);
 	boolean approveReimbursements(int roleId, int reimbursementId);
 	ArrayList<Reimbursements> filterRequests(int roleId, int statusId);
 

@@ -19,6 +19,8 @@ public class Reimbursements {
 	private ReimbursementStatus reimb_status_id;
 	private ReimbursementTypes reimb_type_id;
 	
+	public Reimbursements() {}
+	
 	public Reimbursements(int reimb_id, double reimb_amount, Date reimb_submitted, Date reimb_resolved,
 			String reimb_description, InputStream reimb_receipt, UserRoles reimb_author, UserRoles reimb_resolver,
 			ReimbursementStatus reimb_status_id, ReimbursementTypes reimb_type_id) {
