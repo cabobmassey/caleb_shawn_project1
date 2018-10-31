@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import revature.project1.models.Users;
-import revature.project1.userroles.UserRoles;
 import revature.project1.utils.ConnectionFactory;
 
 public class UserDAOImpl implements UserDAO {
@@ -40,12 +39,7 @@ public class UserDAOImpl implements UserDAO {
                 existingUser.setUsername(loginResultSet.getString("ers_username"));
                 existingUser.setPassword(loginResultSet.getString("ers_password"));
                 existingUser.setEmail(loginResultSet.getString("user_email"));
-                int userRole = loginResultSet.getInt("user_role_id");
-                if (userRole == 1) {
-                	existingUser.setUserRoleId(UserRoles.AUTHOR);
-                }else if (userRole == 2) {
-                	existingUser.setUserRoleId(UserRoles.RESOLVER);
-                }
+                existingUser.setUserRoleId(loginResultSet.getInt("user_role_id"));
             }
     
             conn.commit();
@@ -83,7 +77,7 @@ public class UserDAOImpl implements UserDAO {
 
 	@Override
 	public boolean createUser(String username, String password, String firstname, String lastname, String email,
-			UserRoles roleId) {
+			int roleId) {
 		try(Connection conn = ConnectionFactory.getInstance().getConnection();){
             conn.setAutoCommit(false);
                        
@@ -96,12 +90,7 @@ public class UserDAOImpl implements UserDAO {
             pstmtUser.setString(3, firstname);
             pstmtUser.setString(4, lastname);
             pstmtUser.setString(5, email);
-            if (roleId == UserRoles.AUTHOR) {
-            	pstmtUser.setInt(6, 1);
-            }else if (roleId == UserRoles.RESOLVER) {
-            	pstmtUser.setInt(6, 2);
-            }
-            
+            pstmtUser.setInt(6, roleId);
             
             int rowsInsertedUser = pstmtUser.executeUpdate(); // executes the DML statement; inserts a new User into the Users table; returns the number of rows affected
                 
