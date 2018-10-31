@@ -9,7 +9,6 @@ import revature.project1.models.Users;
 import revature.project1.utils.ConnectionFactory;
 
 public class UserDAOImpl implements UserDAO {
-
 	@Override
 	public Users login(String username, String password) {
 		Users existingUser = null;

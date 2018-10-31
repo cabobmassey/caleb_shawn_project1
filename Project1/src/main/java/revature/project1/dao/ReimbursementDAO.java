@@ -13,8 +13,8 @@ public interface ReimbursementDAO {
 	boolean addReimbursementRequest(double amount, Date submitted,
 									Date resolved, String description, Blob receipt,
 									int author, int resolver, int statusId, int typeId);
-	ArrayList<Reimbursement> viewAllReimbursements(int roleId);
-	void changeReimbursementStatus(int reimbursementId, int statusId);
+	ArrayList<Reimbursement> viewAllReimbursements();
+	void changeReimbursementStatus(int reimbursementId, int statusId, int resolver_id);
 	ArrayList<Reimbursement> filterRequests(int statusId);
 
 }

@@ -1,6 +1,5 @@
 package revature.project1.models;
 
-import revature.project1.userroles.UserRoles;
 
 public class Users {
 	
