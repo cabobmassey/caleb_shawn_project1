@@ -1,19 +1,22 @@
 package revature.project1.dao;
 
-import java.io.InputStream;
+import java.sql.Blob;
 import java.sql.Date;
 import java.util.ArrayList;
 
 import revature.project1.models.Reimbursement;
+import revature.project1.reimbursementstatus.ReimbursementStatus;
+import revature.project1.reimbursementtypes.ReimbursementTypes;
+import revature.project1.userroles.UserRoles;
 
 public interface ReimbursementDAO {
 	
 	ArrayList<Reimbursement> viewPastRequests(int author);
 	boolean addReimbursementRequest(double amount, Date submitted,
-									Date resolved, String description, InputStream receipt,
-									int author, int resolver, int statusId, int typeId);
-	ArrayList<Reimbursement> viewAllReimbursements(int userId);
-	boolean approveReimbursements(int roleId, int reimbursementId);
-	ArrayList<Reimbursement> filterRequests(int roleId, int statusId);
+									Date resolved, String description, Blob receipt,
+									UserRoles author, UserRoles resolver, ReimbursementStatus statusId, ReimbursementTypes typeId);
+	ArrayList<Reimbursement> viewAllReimbursements(UserRoles roleId);
+	boolean approveReimbursements(UserRoles roleId);
+	ArrayList<Reimbursement> filterRequests(UserRoles roleId, ReimbursementStatus statusId);
 
 }

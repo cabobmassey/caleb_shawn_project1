@@ -83,7 +83,7 @@ public class UserDAOImpl implements UserDAO {
 
 	@Override
 	public boolean createUser(String username, String password, String firstname, String lastname, String email,
-			int roleId) {
+			UserRoles roleId) {
 		try(Connection conn = ConnectionFactory.getInstance().getConnection();){
             conn.setAutoCommit(false);
                        
@@ -96,7 +96,12 @@ public class UserDAOImpl implements UserDAO {
             pstmtUser.setString(3, firstname);
             pstmtUser.setString(4, lastname);
             pstmtUser.setString(5, email);
-            pstmtUser.setInt(6, roleId);
+            if (roleId == UserRoles.AUTHOR) {
+            	pstmtUser.setInt(6, 1);
+            }else if (roleId == UserRoles.RESOLVER) {
+            	pstmtUser.setInt(6, 2);
+            }
+            
             
             int rowsInsertedUser = pstmtUser.executeUpdate(); // executes the DML statement; inserts a new User into the Users table; returns the number of rows affected
                 
