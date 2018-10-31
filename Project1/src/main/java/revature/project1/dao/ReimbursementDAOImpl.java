@@ -1,45 +1,201 @@
 package revature.project1.dao;
 
 import java.sql.Blob;
+import java.sql.CallableStatement;
+import java.sql.Connection;
 import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
+import oracle.jdbc.OracleTypes;
 import revature.project1.models.Reimbursement;
-import revature.project1.reimbursementstatus.ReimbursementStatus;
-import revature.project1.reimbursementtypes.ReimbursementTypes;
-import revature.project1.userroles.UserRoles;
+import revature.project1.utils.ConnectionFactory;
 
 public class ReimbursementDAOImpl implements ReimbursementDAO{
 
 	@Override
-	public ArrayList<Reimbursement> viewPastRequests(int author) {
-		// TODO Auto-generated method stub
-		return null;
+	public ArrayList<Reimbursement> viewPastRequests(int authorId) {
+		ArrayList<Reimbursement> requests = new ArrayList<Reimbursement>();
+		
+		try(Connection conn = ConnectionFactory.getInstance().getConnection();) {
+			
+			// This is a parameterized SQL query, using '?' as a placeholder for values that will
+			// be provided later.
+			String sql = "SELECT * FROM ers_reimbursement WHERE reimb_author = ?";
+			
+			// Get the PreparedStatement object from the Connection
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			
+			// Set the value of the 1st '?' to the value of 'id'
+			pstmt.setInt(1, authorId);
+			
+			// Execute the query and retrieve a ResultSet
+			ResultSet rs = pstmt.executeQuery();
+			
+			// Iterate through the ResultSet and assign values to our Artist object
+			while(rs.next()) {
+				Reimbursement temp = new Reimbursement();
+				temp.setReimb_id(rs.getInt("reimb_id"));
+				temp.setReimb_amount(rs.getDouble("reimb_amount"));
+				temp.setReimb_submitted(rs.getDate("reimb_submitted"));
+				temp.setReimb_resolved(rs.getDate("reimb_resolved"));
+				temp.setReimb_description(rs.getString("reimb_description"));
+				temp.setReimb_receipt(rs.getBlob("reimb_receipt"));
+				temp.setReimb_author(rs.getInt("reimb_author"));
+				temp.setReimb_resolver(rs.getInt("reimb_resolver"));
+				temp.setReimb_status_id(rs.getInt("reimb_status_id"));
+				temp.setReimb_type_id(rs.getInt("reimb_type_id"));
+				requests.add(temp);
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return requests;
+		
+	}
+	
+	
+	@Override
+	public boolean addReimbursementRequest(double amount, Date date_submitted, Date date_resolved, String description,
+			Blob receipt, int author, int resolver, int statusId, int typeId) {
+		
+		try(Connection conn = ConnectionFactory.getInstance().getConnection();){
+            conn.setAutoCommit(false);
+                       
+            // since the account does not already exist, a new user is inserted into the Users table
+            String sqlAddReimbursement = "insert into ers_reimbursement (reimb_amount, REIMB_SUBMITTED, REIMB_RESOLVED, REIMB_DESCRIPTION, REIMB_RECEIPT, REIMB_AUTHOR, REIMB_RESOLVER, REIMB_STATUS_ID, REIMB_TYPE_ID) values(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                
+            PreparedStatement pstmtReimbursement = conn.prepareStatement(sqlAddReimbursement);
+            pstmtReimbursement.setDouble(1, amount);
+            pstmtReimbursement.setDate(2, date_submitted);
+            pstmtReimbursement.setDate(3, date_resolved);
+            pstmtReimbursement.setString(4, description);
+            pstmtReimbursement.setBlob(5, receipt);
+            pstmtReimbursement.setInt(6, author);
+            pstmtReimbursement.setInt(7, resolver);
+            pstmtReimbursement.setInt(8, statusId);
+            pstmtReimbursement.setInt(9, typeId);
+            
+            int rowsInsertedUser = pstmtReimbursement.executeUpdate(); // executes the DML statement; inserts a new Reimbursement into the Reimbursement table; returns the number of rows affected
+                
+            if(rowsInsertedUser == 0) {
+                return false;
+            }
+                
+            conn.commit();
+            conn.close();
+            
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+        return true;
 	}
 
 	@Override
-	public boolean addReimbursementRequest(double amount, Date submitted, Date resolved, String description,
-			Blob receipt, int author, int resolver, ReimbursementStatus statusId, ReimbursementTypes typeId) {
-		// TODO Auto-generated method stub
-		return false;
+	public ArrayList<Reimbursement> viewAllReimbursements(int userId) {
+	       ArrayList<Reimbursement> requests = new ArrayList<>();
+	        
+	        try(Connection conn = ConnectionFactory.getInstance().getConnection();) {
+	            
+	            // Create our SQL query string
+	            String sql = "SELECT * FROM ers_reimbursement";
+	            
+	            // Obtain a Statement object from our Connection
+	            Statement stmt = conn.createStatement();
+	            
+	            // Execute the statement and retrieve a ResultSet object
+	            ResultSet rs = stmt.executeQuery(sql);
+	            
+	            // Iterate through the ResultSet object and create temporary Artist objects that
+	            // will be stored into our artists ArrayList
+	            while(rs.next()) {
+	                Reimbursement temp = new Reimbursement();
+	                temp.setReimb_id(rs.getInt("reimb_id"));
+					temp.setReimb_amount(rs.getDouble("reimb_amount"));
+					temp.setReimb_submitted(rs.getDate("reimb_submitted"));
+					temp.setReimb_resolved(rs.getDate("reimb_resolved"));
+					temp.setReimb_description(rs.getString("reimb_description"));
+					temp.setReimb_receipt(rs.getBlob("reimb_receipt"));
+					temp.setReimb_author(rs.getInt("reimb_author"));
+					temp.setReimb_resolver(rs.getInt("reimb_resolver"));
+					temp.setReimb_status_id(rs.getInt("reimb_status_id"));
+					temp.setReimb_type_id(rs.getInt("reimb_type_id"));
+					requests.add(temp);
+	            }
+	            
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	        
+	        return requests;
 	}
 
 	@Override
-	public ArrayList<Reimbursement> viewAllReimbursements(UserRoles userId) {
-		// TODO Auto-generated method stub
-		return null;
+	public void changeReimbursementStatus(int reimbursementId, int statusId) {       
+        try(Connection conn = ConnectionFactory.getInstance().getConnection();) {
+        	conn.setAutoCommit(false);
+            String sql = "{CALL change_reimb_status(?, ?)}";
+            CallableStatement cstmt = conn.prepareCall(sql);
+            
+            // Setting parameters here is the same as if we were working with a PreparedStatement
+            cstmt.setInt(1, reimbursementId);
+            cstmt.setInt(2, statusId);
+			
+			boolean wasExecuted = cstmt.execute();
+			
+			conn.commit();
+			conn.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override
-	public boolean approveReimbursements(UserRoles roleId) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public ArrayList<Reimbursement> filterRequests(UserRoles roleId, ReimbursementStatus statusId) {
-		// TODO Auto-generated method stub
-		return null;
+	public ArrayList<Reimbursement> filterRequests(int statusId) {
+ArrayList<Reimbursement> requests = new ArrayList<Reimbursement>();
+		
+		try(Connection conn = ConnectionFactory.getInstance().getConnection();) {
+			
+			// This is a parameterized SQL query, using '?' as a placeholder for values that will
+			// be provided later.
+			String sql = "SELECT * FROM ers_reimbursement WHERE reimb_status = ?";
+			
+			// Get the PreparedStatement object from the Connection
+			PreparedStatement pstmt = conn.prepareStatement(sql);
+			
+			// Set the value of the 1st '?' to the value of 'id'
+			pstmt.setInt(1, statusId);
+			
+			// Execute the query and retrieve a ResultSet
+			ResultSet rs = pstmt.executeQuery();
+			
+			// Iterate through the ResultSet and assign values to our Artist object
+			while(rs.next()) {
+				Reimbursement temp = new Reimbursement();
+				temp.setReimb_id(rs.getInt("reimb_id"));
+				temp.setReimb_amount(rs.getDouble("reimb_amount"));
+				temp.setReimb_submitted(rs.getDate("reimb_submitted"));
+				temp.setReimb_resolved(rs.getDate("reimb_resolved"));
+				temp.setReimb_description(rs.getString("reimb_description"));
+				temp.setReimb_receipt(rs.getBlob("reimb_receipt"));
+				temp.setReimb_author(rs.getInt("reimb_author"));
+				temp.setReimb_resolver(rs.getInt("reimb_resolver"));
+				temp.setReimb_status_id(rs.getInt("reimb_status_id"));
+				temp.setReimb_type_id(rs.getInt("reimb_type_id"));
+				requests.add(temp);
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return requests;
 	}
 
 }
