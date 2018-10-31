@@ -19,7 +19,7 @@ public class ReimbursementDAOImpl implements ReimbursementDAO{
 
 	@Override
 	public boolean addReimbursementRequest(double amount, Date submitted, Date resolved, String description,
-			Blob receipt, UserRoles author, UserRoles resolver, ReimbursementStatus statusId, ReimbursementTypes typeId) {
+			Blob receipt, int author, int resolver, ReimbursementStatus statusId, ReimbursementTypes typeId) {
 		// TODO Auto-generated method stub
 		return false;
 	}
