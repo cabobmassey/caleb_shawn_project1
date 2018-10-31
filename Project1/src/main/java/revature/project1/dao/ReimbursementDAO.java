@@ -14,7 +14,7 @@ public interface ReimbursementDAO {
 	ArrayList<Reimbursement> viewPastRequests(int author);
 	boolean addReimbursementRequest(double amount, Date submitted,
 									Date resolved, String description, Blob receipt,
-									UserRoles author, UserRoles resolver, ReimbursementStatus statusId, ReimbursementTypes typeId);
+									int author, int resolver, ReimbursementStatus statusId, ReimbursementTypes typeId);
 	ArrayList<Reimbursement> viewAllReimbursements(UserRoles roleId);
 	boolean approveReimbursements(UserRoles roleId);
 	ArrayList<Reimbursement> filterRequests(UserRoles roleId, ReimbursementStatus statusId);

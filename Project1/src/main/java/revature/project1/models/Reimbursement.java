@@ -15,35 +15,15 @@ public class Reimbursement {
 	private Date reimb_resolved;
 	private String reimb_description;
 	private Blob reimb_receipt;
-	private UserRoles reimb_author;
-	private UserRoles reimb_resolver;
+	private int reimb_author;
+	private int reimb_resolver;
 	private ReimbursementStatus reimb_status_id;
-	@Override
-	public String toString() {
-		return "Reimbursement [reimb_id=" + reimb_id + ", reimb_amount=" + reimb_amount + ", reimb_submitted="
-				+ reimb_submitted + ", reimb_resolved=" + reimb_resolved + ", reimb_description=" + reimb_description
-				+ ", reimb_receipt=" + reimb_receipt + ", reimb_author=" + reimb_author + ", reimb_resolver="
-				+ reimb_resolver + ", reimb_status_id=" + reimb_status_id + ", reimb_type_id=" + reimb_type_id + "]";
-	}
-
 	private ReimbursementTypes reimb_type_id;
 	
 	public Reimbursement() {}
 
-	public Reimbursement(int reimb_id, double reimb_amount, Date reimb_submitted, Date reimb_resolved,
-			String reimb_description, Blob reimb_receipt, UserRoles reimb_author, UserRoles reimb_resolver,
-			ReimbursementStatus reimb_status_id, ReimbursementTypes reimb_type_id) {
-		super();
-		this.reimb_id = reimb_id;
-		this.reimb_amount = reimb_amount;
-		this.reimb_submitted = reimb_submitted;
-		this.reimb_resolved = reimb_resolved;
-		this.reimb_description = reimb_description;
-		this.reimb_receipt = reimb_receipt;
-		this.reimb_author = reimb_author;
-		this.reimb_resolver = reimb_resolver;
-		this.reimb_status_id = reimb_status_id;
-		this.reimb_type_id = reimb_type_id;
+	public int getReimb_id() {
+		return reimb_id;
 	}
 
 	@Override
@@ -53,15 +33,23 @@ public class Reimbursement {
 		long temp;
 		temp = Double.doubleToLongBits(reimb_amount);
 		result = prime * result + (int) (temp ^ (temp >>> 32));
-		result = prime * result + ((reimb_author == null) ? 0 : reimb_author.hashCode());
+		result = prime * result + reimb_author;
 		result = prime * result + ((reimb_description == null) ? 0 : reimb_description.hashCode());
 		result = prime * result + reimb_id;
 		result = prime * result + ((reimb_resolved == null) ? 0 : reimb_resolved.hashCode());
-		result = prime * result + ((reimb_resolver == null) ? 0 : reimb_resolver.hashCode());
+		result = prime * result + reimb_resolver;
 		result = prime * result + ((reimb_status_id == null) ? 0 : reimb_status_id.hashCode());
 		result = prime * result + ((reimb_submitted == null) ? 0 : reimb_submitted.hashCode());
 		result = prime * result + ((reimb_type_id == null) ? 0 : reimb_type_id.hashCode());
 		return result;
+	}
+
+	@Override
+	public String toString() {
+		return "Reimbursement [reimb_id=" + reimb_id + ", reimb_amount=" + reimb_amount + ", reimb_submitted="
+				+ reimb_submitted + ", reimb_resolved=" + reimb_resolved + ", reimb_description=" + reimb_description
+				+ ", reimb_receipt=" + reimb_receipt + ", reimb_author=" + reimb_author + ", reimb_resolver="
+				+ reimb_resolver + ", reimb_status_id=" + reimb_status_id + ", reimb_type_id=" + reimb_type_id + "]";
 	}
 
 	@Override
@@ -103,8 +91,20 @@ public class Reimbursement {
 		return true;
 	}
 
-	public int getReimb_id() {
-		return reimb_id;
+	public Reimbursement(int reimb_id, double reimb_amount, Date reimb_submitted, Date reimb_resolved,
+			String reimb_description, Blob reimb_receipt, int reimb_author, int reimb_resolver,
+			ReimbursementStatus reimb_status_id, ReimbursementTypes reimb_type_id) {
+		super();
+		this.reimb_id = reimb_id;
+		this.reimb_amount = reimb_amount;
+		this.reimb_submitted = reimb_submitted;
+		this.reimb_resolved = reimb_resolved;
+		this.reimb_description = reimb_description;
+		this.reimb_receipt = reimb_receipt;
+		this.reimb_author = reimb_author;
+		this.reimb_resolver = reimb_resolver;
+		this.reimb_status_id = reimb_status_id;
+		this.reimb_type_id = reimb_type_id;
 	}
 
 	public void setReimb_id(int reimb_id) {
@@ -151,19 +151,19 @@ public class Reimbursement {
 		this.reimb_receipt = reimb_receipt;
 	}
 
-	public UserRoles getReimb_author() {
+	public int getReimb_author() {
 		return reimb_author;
 	}
 
-	public void setReimb_author(UserRoles reimb_author) {
+	public void setReimb_author(int reimb_author) {
 		this.reimb_author = reimb_author;
 	}
 
-	public UserRoles getReimb_resolver() {
+	public int getReimb_resolver() {
 		return reimb_resolver;
 	}
 
-	public void setReimb_resolver(UserRoles reimb_resolver) {
+	public void setReimb_resolver(int reimb_resolver) {
 		this.reimb_resolver = reimb_resolver;
 	}
 
@@ -182,5 +182,4 @@ public class Reimbursement {
 	public void setReimb_type_id(ReimbursementTypes reimb_type_id) {
 		this.reimb_type_id = reimb_type_id;
 	}
-	
 }
