@@ -4,10 +4,6 @@ import java.io.InputStream;
 import java.sql.Blob;
 import java.sql.Date;
 
-import revature.project1.reimbursementstatus.ReimbursementStatus;
-import revature.project1.reimbursementtypes.ReimbursementTypes;
-import revature.project1.userroles.UserRoles;
-
 public class Reimbursement {
 	private int reimb_id;
 	private double reimb_amount;

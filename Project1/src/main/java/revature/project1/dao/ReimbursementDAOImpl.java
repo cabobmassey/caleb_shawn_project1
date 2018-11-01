@@ -98,7 +98,7 @@ public class ReimbursementDAOImpl implements ReimbursementDAO{
 	}
 
 	@Override
-	public ArrayList<Reimbursement> viewAllReimbursements(int userId) {
+	public ArrayList<Reimbursement> viewAllReimbursements() {
 	       ArrayList<Reimbursement> requests = new ArrayList<>();
 	        
 	        try(Connection conn = ConnectionFactory.getInstance().getConnection();) {
@@ -137,15 +137,16 @@ public class ReimbursementDAOImpl implements ReimbursementDAO{
 	}
 
 	@Override
-	public void changeReimbursementStatus(int reimbursementId, int statusId) {       
+	public void changeReimbursementStatus(int reimbursementId, int statusId, int resolver_id) {       
         try(Connection conn = ConnectionFactory.getInstance().getConnection();) {
         	conn.setAutoCommit(false);
-            String sql = "{CALL change_reimb_status(?, ?)}";
+            String sql = "{CALL change_reimb_status(?, ?, ?)}";
             CallableStatement cstmt = conn.prepareCall(sql);
             
             // Setting parameters here is the same as if we were working with a PreparedStatement
             cstmt.setInt(1, reimbursementId);
             cstmt.setInt(2, statusId);
+            cstmt.setInt(3, resolver_id);
 			
 			boolean wasExecuted = cstmt.execute();
 			
