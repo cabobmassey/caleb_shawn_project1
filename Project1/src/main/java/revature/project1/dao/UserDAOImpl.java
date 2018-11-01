@@ -24,12 +24,13 @@ public class UserDAOImpl implements UserDAO {
             
             ResultSet loginResultSet = pstmtExisting.executeQuery(); // execute the query and retrieve the result of the query
             
+            // if the user doesn't exist, return null
             if (!loginResultSet.next()) {
                 return existingUser;
             }
             
             /* since the user exists, retrieve the column values of the selected record 
-            		from the User table and set the private fields of the new user */
+            		from the ers_users table and set the private fields of the new user */
             existingUser = new Users();
             if (loginResultSet.next()) {
                 existingUser.setUserId(loginResultSet.getInt("ers_users_id"));
@@ -59,7 +60,7 @@ public class UserDAOImpl implements UserDAO {
 			pstmtgetId.setString(1, username);
 			ResultSet rs = pstmtgetId.executeQuery();
 			if (!rs.next()) {
-				return -1;
+				return userId;
 			}
 			userId = rs.getInt("ers_users_id");
 			conn.commit();
@@ -79,8 +80,20 @@ public class UserDAOImpl implements UserDAO {
 			int roleId) {
 		try(Connection conn = ConnectionFactory.getInstance().getConnection();){
             conn.setAutoCommit(false);
+            
+            // determine if the username or email is unique
+            String sqlRetrieveUser = "select * from ers_users where ers_username = ? OR user_email = ?";
+            PreparedStatement pstmtUsernames = conn.prepareStatement(sqlRetrieveUser);
+            pstmtUsernames.setString(1, username);
+            pstmtUsernames.setString(2,  email);
+            ResultSet checkIfUserExists = pstmtUsernames.executeQuery();
+            
+            // if the user already exists, return false
+            if (checkIfUserExists.next()) {
+            	return false;
+            }
                        
-            // since the account does not already exist, a new user is inserted into the Users table
+            // since the account does not already exist, a new user is inserted into the ers_users table
             String sqlAddUser = "insert into ers_users (ers_username, ers_password, user_first_name, user_last_name, user_email, user_role_id) values(?, ?, ?, ?, ?, ?)";
                 
             PreparedStatement pstmtUser = conn.prepareStatement(sqlAddUser);
@@ -107,30 +120,25 @@ public class UserDAOImpl implements UserDAO {
         
         return true;
 	}
-
-	@Override
-	public boolean checkIfUserExists(String usernameOrEmail) {
+	
+	public boolean checkIfUserExistsById(int userId) {
 		try(Connection conn = ConnectionFactory.getInstance().getConnection();){
-            
-            // determine if the username or email is unique
-            String sqlRetrieveUser = "select * from ers_users where ers_username = ? OR ers_email = ?";
-            PreparedStatement pstmtUsernames = conn.prepareStatement(sqlRetrieveUser);
-            pstmtUsernames.setString(1, usernameOrEmail);
-            pstmtUsernames.setString(2,  usernameOrEmail);
-            ResultSet checkIfUserExists = pstmtUsernames.executeQuery();
-            
-            // Once the query is executed, the result is placed in a ResultSet
-            // The ResultSet maintains a cursor; initially it is placed before the first row. The first call to the next() method will move the cursor forward to the first record
-            // If the record is valid, then the account exists. If there are no rows in the ResultSet, the account does not exist
-            if (!checkIfUserExists.next()) {
-            	return false;
-            }
-            
-            conn.close();
+			conn.setAutoCommit(false);
+			String getId = "SELECT * FROM ers_users WHERE ers_users_id = ?";
+			PreparedStatement pstmtgetId = conn.prepareStatement(getId);
+			pstmtgetId.setInt(1, userId);
+			ResultSet rs = pstmtgetId.executeQuery();
+			if (!rs.next()) {
+				return false;
+			}
+			
+			conn.commit();
+			conn.close();
+			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 		return true;
 	}
 }

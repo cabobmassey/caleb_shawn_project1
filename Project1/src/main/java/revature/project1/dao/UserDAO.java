@@ -9,5 +9,5 @@ public interface UserDAO {
 	boolean createUser(String username, String password, 
             String  firstname, String lastname, 
             String email, int roleId);
-	boolean checkIfUserExists(String usernameOrEmail);
+	boolean checkIfUserExistsById(int userId);
 }
