@@ -8,9 +8,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 
-import oracle.jdbc.OracleTypes;
 import revature.project1.models.Reimbursement;
 import revature.project1.utils.ConnectionFactory;
 
@@ -40,8 +40,8 @@ public class ReimbursementDAOImpl implements ReimbursementDAO{
 				Reimbursement temp = new Reimbursement();
 				temp.setReimb_id(rs.getInt("reimb_id"));
 				temp.setReimb_amount(rs.getDouble("reimb_amount"));
-				temp.setReimb_submitted(rs.getDate("reimb_submitted"));
-				temp.setReimb_resolved(rs.getDate("reimb_resolved"));
+				temp.setReimb_submitted(rs.getTimestamp("reimb_submitted"));
+				temp.setReimb_resolved(rs.getTimestamp("reimb_resolved"));
 				temp.setReimb_description(rs.getString("reimb_description"));
 				temp.setReimb_receipt(rs.getBlob("reimb_receipt"));
 				temp.setReimb_author(rs.getInt("reimb_author"));
@@ -60,25 +60,24 @@ public class ReimbursementDAOImpl implements ReimbursementDAO{
 	
 	
 	@Override
-	public boolean addReimbursementRequest(double amount, Date date_submitted, Date date_resolved, String description,
-			Blob receipt, int author, int resolver, int statusId, int typeId) {
+	public boolean addReimbursementRequest(double amount, Timestamp date_submitted, Timestamp date_resolved, String description,
+			Blob receipt, int author, int statusId, int typeId) {
 		
 		try(Connection conn = ConnectionFactory.getInstance().getConnection();){
             conn.setAutoCommit(false);
                        
             // since the account does not already exist, a new user is inserted into the Users table
-            String sqlAddReimbursement = "insert into ers_reimbursement (reimb_amount, REIMB_SUBMITTED, REIMB_RESOLVED, REIMB_DESCRIPTION, REIMB_RECEIPT, REIMB_AUTHOR, REIMB_RESOLVER, REIMB_STATUS_ID, REIMB_TYPE_ID) values(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String sqlAddReimbursement = "insert into ers_reimbursement (reimb_amount, REIMB_SUBMITTED, REIMB_RESOLVED, REIMB_DESCRIPTION, REIMB_RECEIPT, REIMB_AUTHOR, REIMB_STATUS_ID, REIMB_TYPE_ID) values(?, ?, ?, ?, ?, ?, ?, ?)";
                 
             PreparedStatement pstmtReimbursement = conn.prepareStatement(sqlAddReimbursement);
             pstmtReimbursement.setDouble(1, amount);
-            pstmtReimbursement.setDate(2, date_submitted);
-            pstmtReimbursement.setDate(3, date_resolved);
+            pstmtReimbursement.setTimestamp(2, date_submitted);
+            pstmtReimbursement.setTimestamp(3, date_resolved);
             pstmtReimbursement.setString(4, description);
             pstmtReimbursement.setBlob(5, receipt);
             pstmtReimbursement.setInt(6, author);
-            pstmtReimbursement.setInt(7, resolver);
-            pstmtReimbursement.setInt(8, statusId);
-            pstmtReimbursement.setInt(9, typeId);
+            pstmtReimbursement.setInt(7, statusId);
+            pstmtReimbursement.setInt(8, typeId);
             
             int rowsInsertedUser = pstmtReimbursement.executeUpdate(); // executes the DML statement; inserts a new Reimbursement into the Reimbursement table; returns the number of rows affected
                 
@@ -118,8 +117,8 @@ public class ReimbursementDAOImpl implements ReimbursementDAO{
 	                Reimbursement temp = new Reimbursement();
 	                temp.setReimb_id(rs.getInt("reimb_id"));
 					temp.setReimb_amount(rs.getDouble("reimb_amount"));
-					temp.setReimb_submitted(rs.getDate("reimb_submitted"));
-					temp.setReimb_resolved(rs.getDate("reimb_resolved"));
+					temp.setReimb_submitted(rs.getTimestamp("reimb_submitted"));
+					temp.setReimb_resolved(rs.getTimestamp("reimb_resolved"));
 					temp.setReimb_description(rs.getString("reimb_description"));
 					temp.setReimb_receipt(rs.getBlob("reimb_receipt"));
 					temp.setReimb_author(rs.getInt("reimb_author"));
@@ -182,8 +181,8 @@ ArrayList<Reimbursement> requests = new ArrayList<Reimbursement>();
 				Reimbursement temp = new Reimbursement();
 				temp.setReimb_id(rs.getInt("reimb_id"));
 				temp.setReimb_amount(rs.getDouble("reimb_amount"));
-				temp.setReimb_submitted(rs.getDate("reimb_submitted"));
-				temp.setReimb_resolved(rs.getDate("reimb_resolved"));
+				temp.setReimb_submitted(rs.getTimestamp("reimb_submitted"));
+				temp.setReimb_resolved(rs.getTimestamp("reimb_resolved"));
 				temp.setReimb_description(rs.getString("reimb_description"));
 				temp.setReimb_receipt(rs.getBlob("reimb_receipt"));
 				temp.setReimb_author(rs.getInt("reimb_author"));
