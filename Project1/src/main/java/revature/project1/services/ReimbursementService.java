@@ -29,7 +29,7 @@ public class ReimbursementService {
 		if (!checkIfUserExists(author)) {
 			return false;
 		}
-		boolean createdUser = createdUser = reimbDAO.addReimbursementRequest(amount, date_submitted, date_resolved, description, receipt, author, statusId, typeId);
+		boolean createdUser = reimbDAO.addReimbursementRequest(amount, date_submitted, date_resolved, description, receipt, author, statusId, typeId);
 		return createdUser;
 	}
 	

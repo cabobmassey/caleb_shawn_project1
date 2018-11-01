@@ -1,6 +1,5 @@
 package Project1UnitTests;
-//import org.junit.Test;
-import junit.framework.Assert;
+import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import revature.project1.services.UsersService;
@@ -9,12 +8,12 @@ public class UserTests {
 	
 	@Test
 	public void testCreateUserWithRoleId1() {
-		assertEquals(true, userService.createUser("test_username_unique1", "test_password", "test_firstname", "test_lastname", "jimmyUnique1@gmail.com", 1));
+		assertEquals(true, userService.createUser("test_username_unique2", "test_password", "test_firstname", "test_lastname", "jimmyUnique2@gmail.com", 1));
 	}
 	
 	@Test
 	public void testCreateWithRoleId2() {
-		assertEquals(true, userService.createUser("test_username5_unique", "test_password", "test_firstname", "test_lastname", "jimmyUnique5@gmail.com", 2));
+		assertEquals(true, userService.createUser("test_username6_unique", "test_password", "test_firstname", "test_lastname", "jimmyUnique6@gmail.com", 2));
 	}
 	
 	
