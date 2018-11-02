@@ -45,37 +45,26 @@ function login() {
 }
 
 function loadHome(userRoleId) {
-	
-	console.log(userRoleId);
 	let isAuth = isAuthenticated();
 	updateNav(isAuth);
+	
+	
+	let xhr = new XMLHttpRequest();
+	
 	if (userRoleId == 1){
-		let xhr = new XMLHttpRequest();
-		
 		xhr.open('GET', 'author_home.view', true);
-		xhr.send();
-		
-		xhr.onreadystatechange = function() {
-			if(xhr.readyState == 4 && xhr.status == 200) {
-				document.getElementById('view').innerHTML = xhr.responseText;
-				//loadHomeInfo();
-			}
-		}
-	}else if (userRoleId == 2){
-		let xhr = new XMLHttpRequest();
-		
+	}else  if (userRoleId == 2){
 		xhr.open('GET', 'resolver_home.view', true);
-		xhr.send();
-		console.log("in resolver")
-		xhr.onreadystatechange = function() {
-			if(xhr.readyState == 4 && xhr.status == 200) {
-				document.getElementById('view').innerHTML = xhr.responseText;
-				//loadHomeInfo();
-			}
-		}
 	}
 	
-
+	xhr.send();
+	
+	xhr.onreadystatechange = function() {
+		if(xhr.readyState == 4 && xhr.status == 200) {
+			document.getElementById('view').innerHTML = xhr.responseText;
+			//loadHomeInfo();
+		}
+	}
 }
 
 function loadHomeInfo() {
