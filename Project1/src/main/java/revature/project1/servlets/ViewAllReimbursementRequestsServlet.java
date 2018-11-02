@@ -13,27 +13,22 @@ import javax.servlet.http.HttpServletResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import revature.project1.models.Reimbursement;
-import revature.project1.models.Users;
 import revature.project1.services.ReimbursementService;
 
-@WebServlet("/view_past_tickets")
-public class ViewPastTicketsServlet extends HttpServlet {
+@WebServlet("/view_all_tickets")
+public class ViewAllReimbursementRequestsServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        ReimbursementService reimbService = new ReimbursementService();
+		ReimbursementService reimbService = new ReimbursementService();
 		ObjectMapper mapper = new ObjectMapper();
-		
-		Integer author = mapper.readValue(request.getInputStream(), Integer.class);
-		
-		ArrayList<Reimbursement> pastAuthorRequests = reimbService.viewPastRequests(author);
-		
+			
+		ArrayList<Reimbursement> allReimbursementRequsts = reimbService.viewAllReimbursements();
+			
 		PrintWriter pw = response.getWriter();
 		response.setContentType("application/json");
-		String pastRequestsJSON = mapper.writeValueAsString(pastAuthorRequests);
-		pw.write(pastRequestsJSON);
+		String allReimbursementsJSON = mapper.writeValueAsString(allReimbursementRequsts);
+		pw.write(allReimbursementsJSON);
 	}
+
 }

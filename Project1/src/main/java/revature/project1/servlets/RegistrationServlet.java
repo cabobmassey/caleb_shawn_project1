@@ -19,12 +19,6 @@ public class RegistrationServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)throws IOException, ServletException{
-		PrintWriter pw = response.getWriter();
-		 response.setContentType("application/json");
-		 ObjectMapper mapper = new ObjectMapper();
-		 String x = mapper.writeValueAsString(Boolean.FALSE);
-		 pw.write(x);
-    	/*
         UsersService userService = new UsersService();
         ObjectMapper mapper = new ObjectMapper();
         
@@ -39,7 +33,7 @@ public class RegistrationServlet extends HttpServlet {
         }else {
             userJSON = mapper.writeValueAsString(Boolean.FALSE);
         }
-        pw.write(userJSON);*/
+        pw.write(userJSON);
     }
 
 }
