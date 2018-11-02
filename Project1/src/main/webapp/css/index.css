@@ -22,3 +22,11 @@
 	margin-left: 3%;
 	margin-right: 3%
 }
+
+#title{
+	text-align: center;
+}
+
+#submit-new-req-btn, #req-history-btn {
+	width: 49%
+}
