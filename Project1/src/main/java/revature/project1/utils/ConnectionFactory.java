@@ -27,10 +27,9 @@ public class ConnectionFactory {
         
         try {
             
-            // Load the properties file keys/values into the Properties object
-        	URL fileLoc = getClass().getResource("/application.properties");
-        	prop.load(new FileReader(fileLoc.getFile()));
-        	
+        	Class.forName("oracle.jdbc.driver.OracleDriver");
+            URL fileLoc = getClass().getResource("/application.properties");
+            prop.load(new FileReader(fileLoc.getFile()));
             
             // Get a connection from the DriverManager
             conn = DriverManager.getConnection(
@@ -44,7 +43,9 @@ public class ConnectionFactory {
             fnfe.printStackTrace();
         } catch (IOException ioe) {
             ioe.printStackTrace();
-        }
+        } catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
         
         return conn;
     }

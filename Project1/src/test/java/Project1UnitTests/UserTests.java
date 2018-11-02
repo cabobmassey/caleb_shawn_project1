@@ -6,15 +6,15 @@ import revature.project1.services.UsersService;
 public class UserTests {
 	private UsersService userService = new UsersService();
 	
-	@Test
-	public void testCreateUserWithRoleId1() {
-		assertEquals(true, userService.createUser("test_username_unique2", "test_password", "test_firstname", "test_lastname", "jimmyUnique2@gmail.com", 1));
-	}
-	
-	@Test
-	public void testCreateWithRoleId2() {
-		assertEquals(true, userService.createUser("test_username6_unique", "test_password", "test_firstname", "test_lastname", "jimmyUnique6@gmail.com", 2));
-	}
+//	@Test
+//	public void testCreateUserWithRoleId1() {
+//		assertEquals(true, userService.createUser("test_username_unique2", "test_password", "test_firstname", "test_lastname", "jimmyUnique2@gmail.com", 1));
+//	}
+//	
+//	@Test
+//	public void testCreateWithRoleId2() {
+//		assertEquals(true, userService.createUser("test_username6_unique", "test_password", "test_firstname", "test_lastname", "jimmyUnique6@gmail.com", 2));
+//	}
 	
 	
 	@Test

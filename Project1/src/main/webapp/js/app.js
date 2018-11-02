@@ -272,10 +272,10 @@ function register() {
 	$('#register').attr('disabled', true);
 	
 	let user = {
-			id: 0,
+			userId: 0,
 			firstName: $('#fn').val(),
 			lastName: $('#ln').val(),
-			emailAddress: $('#email').val(),
+			email: $('#email').val(),
 			username: $('#reg-username').val(),
 			password: $('#reg-password').val()
 	}
