@@ -1,8 +1,7 @@
 window.onload = function() {
 	loadLogin();
 	document.getElementById('toLogin').addEventListener('click', loadLogin);
-	document.getElementById('toRegister').addEventListener('click',
-			loadRegister);
+	document.getElementById('toRegister').addEventListener('click',loadRegister);
 
 	document.getElementById('toHome').addEventListener('click', loadHome);
 	document.getElementById('toProfile').addEventListener('click', loadProfile);
@@ -77,33 +76,31 @@ function loadResolverHomeInfo() {
 	console.log('in loadResolverHomeInfo()');
 	let userJSON = window.localStorage.getItem('user');
 	let user = JSON.parse(userJSON);
-	$('#user_id').html(user.id);
+
 	$('#user_fn').html(user.firstName);
-	$('#user_ln').html(user.lastName);
-	$('#user_email').html(user.emailAddress);
-	$('#user_username').html(user.username);
-	$('#user_password').html(user.password);
+
 }
 
 function loadAuthorHomeInfo() {
 	console.log('in loadAuthorHomeInfo()');
 	let userJSON = window.localStorage.getItem('user');
 	let user = JSON.parse(userJSON);
+
 	$('#user_fn').html(user.firstName);
-	
-//	$('#submit-new-req-btn').on(/*go to submit new request*/);
+
+	$('#submit-new-req-btn').click(loadCreateTicket);
 	$('#req-history-btn').click(loadViewPastRequests);
-	
+
 }
 
-function loadViewPastRequests(){
+function loadViewPastRequests() {
 	console.log('in loadViewPastRequests()');
-	
+
 	let isAuth = isAuthenticated();
 	updateNav(isAuth);
 
 	let xhr = new XMLHttpRequest();
-	
+
 	xhr.open('GET', 'author_pastrequests.view', true);
 
 	xhr.send();
@@ -122,9 +119,55 @@ function loadViewPastRequestsInfo() {
 	let userJSON = window.localStorage.getItem('user');
 	let user = JSON.parse(userJSON);
 	$('#user_fn').html(user.firstName);
+
+	$('#author-return-home').click(function() {
+		loadHome(user.userRoleId)
+	});
+
+}
+
+function loadCreateTicket() {
+
+	console.log('in loadCreateTicket()');
+
+	let isAuth = isAuthenticated();
+	updateNav(isAuth);
+
+	let xhr = new XMLHttpRequest();
+
+	xhr.open('GET', 'author_newticket.view', true);
+
+	xhr.send();
+
+	xhr.onreadystatechange = function() {
+		if (xhr.readyState == 4 && xhr.status == 200) {
+			document.getElementById('view').innerHTML = xhr.responseText;
+			loadCreateTicketInfo();
+		}
+	}
+
+}
+
+function loadCreateTicketInfo() {
+
+	console.log('in loadCreateTicketInfo()');
+	$('#submit-request').attr('disabled', true);
+	let userJSON = window.localStorage.getItem('user');
+	let user = JSON.parse(userJSON);
+	let request = {
+			amount : $('#amount').val(),
+			description : $('#description-input').val(),
+			type : $('#type-input').val()
+		}
 	
-	$('#author-return-home').click(function(){loadHome(user.userRoleId)});
+	$('#amount').blur(isCreateTicketFormValid);
+	$('#description-input').blur(isCreateTicketFormValid);
+	$('#type-input').blur(isCreateTicketFormValid);
+
 	
+	$('#submit-request').click(function() {loadHome(user.userRoleId)});
+	$('#author-return-home').click(function() {loadHome(user.userRoleId)});
+
 }
 
 function loadProfile() {
@@ -230,8 +273,8 @@ function loadRegisterInfo() {
 	$('#reg-password').blur(isRegisterFormValid);
 
 	$('#reg-username').blur(validateUsername); // same as
-												// document.getElementById('reg-username').addEventListener('blur',
-												// function, boolean);
+	// document.getElementById('reg-username').addEventListener('blur',
+	// function, boolean);
 	$('#email').blur(validateEmail);
 
 	$('#register').attr('disabled', true);
@@ -303,6 +346,15 @@ function isRegisterFormValid() {
 		$('#register').attr('disabled', true);
 	else
 		$('#register').attr('disabled', false);
+}
+
+function isCreateTicketFormValid() {
+	let form = [ $('#amount').val(), $('#description-input').val(), $('#type-input').val()];
+
+	if (!(form[0] && form[1] && form[2]))
+		$('#submit-request').attr('disabled', true);
+	else
+		$('#submit-request').attr('disabled', false);
 }
 
 function validateUsername() {
