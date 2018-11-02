@@ -46,7 +46,7 @@ function loadLogin() {
 	
 	let xhr = new XMLHttpRequest();
 	
-	xhr.open('GET', 'authorlogin.view', true);
+	xhr.open('GET', 'login.view', true);
 	xhr.send();
 	
 	xhr.onreadystatechange = function() {
@@ -272,12 +272,12 @@ function register() {
 	$('#register').attr('disabled', true);
 	
 	let user = {
-			userId: 0,
 			firstName: $('#fn').val(),
 			lastName: $('#ln').val(),
 			email: $('#email').val(),
 			username: $('#reg-username').val(),
-			password: $('#reg-password').val()
+			password: $('#reg-password').val(),
+			userRoleId: $('#user-role').val()
 	}
 	
 	let userJSON = JSON.stringify(user);
