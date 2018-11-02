@@ -187,11 +187,12 @@ function register() {
 	xhr.send(userJSON);
 
 	xhr.onreadystatechange = function() {
-		if (xhr.readyState == 4 && xhr.status == 200) {
-			if (!xhr.responseText) {
-				$('#message').show().html('Something went wrong...');
-			} else {
-				$('#message').hide();
+    
+		if(xhr.readyState == 4 && xhr.status == 200) {
+			if(xhr.responseText == 'false') {
+				$('#reg-message').show().html('Something went wrong...');
+			} else  {
+				$('#reg-message').hide();
 				alert('Enrollment successful! Please login using your credentials.');
 				loadLogin();
 			}

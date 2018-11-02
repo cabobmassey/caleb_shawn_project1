@@ -9,4 +9,24 @@
     <welcome-file>default.htm</welcome-file>
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
+  <servlet>
+    <description></description>
+    <display-name>AddReimbursementRequest</display-name>
+    <servlet-name>AddReimbursementRequest</servlet-name>
+    <servlet-class>revature.project1.servlets.AddReimbursementRequest</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AddReimbursementRequest</servlet-name>
+    <url-pattern>/AddReimbursementRequest</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>ViewPastTicketsServlet</display-name>
+    <servlet-name>ViewPastTicketsServlet</servlet-name>
+    <servlet-class>revature.project1.servlets.ViewPastTicketsServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ViewPastTicketsServlet</servlet-name>
+    <url-pattern>/ViewPastTicketsServlet</url-pattern>
+  </servlet-mapping>
 </web-app>
