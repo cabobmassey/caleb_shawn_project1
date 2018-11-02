@@ -33,7 +33,6 @@ public class LoginServlet extends HttpServlet {
 		UsersService userService = new UsersService();
 		
 		Users authUser = userService.login(username, password);
-		
 //		Users authUser = Users.duplicate(usersService.login(username, password));
 //		authUser.setPassword("***************");
 		

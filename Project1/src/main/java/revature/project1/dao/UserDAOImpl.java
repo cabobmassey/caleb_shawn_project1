@@ -21,12 +21,13 @@ public class UserDAOImpl implements UserDAO {
 			PreparedStatement pstmtExisting = conn.prepareStatement(sqlExistingAccount);
 			pstmtExisting.setString(1, username);
 			pstmtExisting.setString(2, password);
+			
 
 			ResultSet loginResultSet = pstmtExisting.executeQuery(); // execute the query and retrieve the result of the
 																		// query
-
+			System.out.println(loginResultSet);
 			// if the user doesn't exist, return null
-			if (!loginResultSet.next()) {
+			if (!loginResultSet.isBeforeFirst()) {
 				return existingUser;
 			}
 
@@ -44,7 +45,7 @@ public class UserDAOImpl implements UserDAO {
 				existingUser.setEmail(loginResultSet.getString("user_email"));
 				existingUser.setUserRoleId(loginResultSet.getInt("user_role_id"));
 			}
-
+			
 			conn.commit();
 			conn.close();
 		} catch (SQLException e) {
