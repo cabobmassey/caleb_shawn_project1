@@ -141,4 +141,12 @@ public class UserDAOImpl implements UserDAO {
 		
 		return true;
 	}
+	
+//	public Users getUserByUsername(String username) {
+//		return userDB.getUserByUsername(username);
+//	}
+//	
+//	public Users getUserByEmailAddress(String emailAddress) {
+//		return userDB.getUserByEmailAddress(emailAddress);
+//	}
 }

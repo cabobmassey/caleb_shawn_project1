@@ -8,7 +8,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -31,13 +30,17 @@ public class LoginServlet extends HttpServlet {
 		String username = userCredentials[0];
 		String password = userCredentials[1];
 		
-		Users authUser = Users.duplicate(usersService.login(username, password));
-		authUser.setPassword("***************");
+		UsersService userService = new UsersService();
 		
-		if(authUser != null) {
-			HttpSession session = request.getSession();
-			session.setAttribute("user", authUser);
-		}
+		Users authUser = userService.login(username, password);
+		
+//		Users authUser = Users.duplicate(usersService.login(username, password));
+//		authUser.setPassword("***************");
+		
+//		if(authUser != null) {
+//			HttpSession session = request.getSession();
+//			session.setAttribute("user", authUser);
+//		}
 		
 		PrintWriter pw = response.getWriter();
 		response.setContentType("application/json");

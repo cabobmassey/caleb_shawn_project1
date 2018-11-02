@@ -39,4 +39,22 @@ public class UsersService {
 			return false;
 		}
 	}
+	
+//	public boolean isEmailAvailable(String emailAddress) {
+//		Users u = userDAO.getUserByEmailAddress(emailAddress);
+//		
+//		if(u == null)
+//			return true;
+//		
+//		return false;
+//	}
+//	
+//	public boolean isUsernameAvailable(String username) {
+//		Users u = userDAO.getUserByUsername(username);
+//		
+//		if(u == null)
+//			return true;
+//		
+//		return false;
+//	}
 }
