@@ -21,7 +21,7 @@ public class LoadView extends HttpServlet {
 		System.out.println("Request sent to front controller, LoadViewServlet.doGet()");
 		
 		String nextView = RequestViewHelper.process(request);
-		System.out.println(nextView);
+
 		
 		request.getRequestDispatcher(nextView).forward(request, response);
 	}
