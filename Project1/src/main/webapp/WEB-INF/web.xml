@@ -9,4 +9,54 @@
     <welcome-file>default.htm</welcome-file>
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
+  <servlet>
+    <description></description>
+    <display-name>AddReimbursementRequest</display-name>
+    <servlet-name>AddReimbursementRequest</servlet-name>
+    <servlet-class>revature.project1.servlets.AddReimbursementRequest</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AddReimbursementRequest</servlet-name>
+    <url-pattern>/AddReimbursementRequest</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>ViewPastTicketsServlet</display-name>
+    <servlet-name>ViewPastTicketsServlet</servlet-name>
+    <servlet-class>revature.project1.servlets.ViewPastTicketsServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ViewPastTicketsServlet</servlet-name>
+    <url-pattern>/ViewPastTicketsServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>ViewAllReimbursementRequestsServlet</display-name>
+    <servlet-name>ViewAllReimbursementRequestsServlet</servlet-name>
+    <servlet-class>revature.project1.servlets.ViewAllReimbursementRequestsServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ViewAllReimbursementRequestsServlet</servlet-name>
+    <url-pattern>/ViewAllReimbursementRequestsServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>ChangeReimbursementStatusServlet</display-name>
+    <servlet-name>ChangeReimbursementStatusServlet</servlet-name>
+    <servlet-class>revature.project1.servlets.ChangeReimbursementStatusServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ChangeReimbursementStatusServlet</servlet-name>
+    <url-pattern>/ChangeReimbursementStatusServlet</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>FilterByStatusServlet</display-name>
+    <servlet-name>FilterByStatusServlet</servlet-name>
+    <servlet-class>revature.project1.servlets.FilterByStatusServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>FilterByStatusServlet</servlet-name>
+    <url-pattern>/FilterByStatusServlet</url-pattern>
+  </servlet-mapping>
 </web-app>
