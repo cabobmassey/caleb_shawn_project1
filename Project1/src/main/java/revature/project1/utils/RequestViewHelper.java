@@ -8,14 +8,14 @@ public class RequestViewHelper {
 		
 		switch(request.getRequestURI()) {
 		
-		case "/Project1/authorlogin.view":
-			return "partials/authorlogin.html";
+		case "/Project1/login.view":
+			return "partials/login.html";
 		
-		case "/Project1/authorregister.view":
-			return "partials/authorregister.html";
+		case "/Project1/register.view":
+			return "partials/register.html";
 			
-		case "/Project1/authorhome.view":
-			return "partials/authorhome.html";
+		case "/Project1/home.view":
+			return "partials/home.html";
 			
 		default:
 			return null;
