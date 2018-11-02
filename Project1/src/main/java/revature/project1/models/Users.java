@@ -1,7 +1,10 @@
 package revature.project1.models;
 
+import java.io.Serializable;
 
-public class Users {
+public class Users implements  Serializable{
+
+	private static final long serialVersionUID = 1L;
 	
 	private int userId;
 	private String username;
@@ -11,7 +14,9 @@ public class Users {
 	private String email;
 	private int userRoleId;
 	
-	public Users() {}
+	public Users() {
+		super();
+	}
 	
 	
 	public Users(int userId, String username, String password, String firstName, String lastName, String email,
@@ -24,6 +29,17 @@ public class Users {
 		this.lastName = lastName;
 		this.email = email;
 		this.userRoleId = userRoleId;
+	}
+	
+	public Users(Users originalUser) {
+		super();
+		this.userId = originalUser.userId;
+		this.firstName = originalUser.firstName;
+		this.lastName = originalUser.lastName;
+		this.email = originalUser.email;
+		this.username = originalUser.username;
+		this.password = originalUser.password;
+		this.userRoleId = originalUser.userRoleId;
 	}
 
 
@@ -142,5 +158,9 @@ public class Users {
 
 	public void setUserRoleId(int userRoleId) {
 		this.userRoleId = userRoleId;
+	}
+	
+	public static Users duplicate(Users originalUser) {
+		return new Users(originalUser);
 	}
 }
