@@ -2,6 +2,7 @@ package revature.project1.utils;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -27,7 +28,9 @@ public class ConnectionFactory {
         try {
             
             // Load the properties file keys/values into the Properties object
-            prop.load(new FileReader("src/main/resources/application.properties"));
+        	URL fileLoc = getClass().getResource("/application.properties");
+        	prop.load(new FileReader(fileLoc.getFile()));
+        	
             
             // Get a connection from the DriverManager
             conn = DriverManager.getConnection(

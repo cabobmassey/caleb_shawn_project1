@@ -1,9 +1,9 @@
 window.onload = function() {
-	loadAuthorLogin();
-	document.getElementById('toLogin').addEventListener('click', loadAuthorLogin);
-	document.getElementById('toRegister').addEventListener('click', loadAuthorRegister);
-	document.getElementById('toHome').addEventListener('click', loadAuthorHome);
-	document.getElementById('toProfile').addEventListener('click', loadAuthorProfile);
+	loadLogin();
+	document.getElementById('toLogin').addEventListener('click', loadLogin);
+	document.getElementById('toRegister').addEventListener('click', loadRegister);
+	document.getElementById('toHome').addEventListener('click', loadHome);
+	document.getElementById('toProfile').addEventListener('click', loadProfile);
 	document.getElementById('toLogout').addEventListener('click', logout);
 	
 	// determines what navbar links to show if the user is or is not authenticated
@@ -38,8 +38,8 @@ function isAuthenticated() {
 	else return false;
 }
 
-function loadAuthorLogin() {
-	console.log('in loadAuthorLogin()');
+function loadLogin() {
+	console.log('in loadLogin()');
 	
 	let isAuth = isAuthenticated();
 	updateNav(isAuth);
@@ -52,13 +52,13 @@ function loadAuthorLogin() {
 	xhr.onreadystatechange = function() {
 		if(xhr.readyState == 4 && xhr.status == 200) {
 			document.getElementById('view').innerHTML = xhr.responseText;
-			loadAuthorLoginInfo();
+			loadLoginInfo();
 		}
 	}
 }
 
-function loadAuthorRegister() {
-	console.log('in loadAuthorRegister()');
+function loadRegister() {
+	console.log('in loadRegister()');
 	
 	let isAuth = isAuthenticated();
 	updateNav(isAuth);
@@ -71,13 +71,13 @@ function loadAuthorRegister() {
 	xhr.onreadystatechange = function() {
 		if(xhr.readyState == 4 && xhr.status == 200) {
 			document.getElementById('view').innerHTML = xhr.responseText;
-			loadAuthorRegisterInfo();
+			loadRegisterInfo();
 		}
 	}
 }
 
-function loadAuthorHome() {
-	console.log('in loadAuthorHome()');
+function loadHome() {
+	console.log('in loadHome()');
 	
 	let isAuth = isAuthenticated();
 	updateNav(isAuth);
@@ -90,13 +90,13 @@ function loadAuthorHome() {
 	xhr.onreadystatechange = function() {
 		if(xhr.readyState == 4 && xhr.status == 200) {
 			document.getElementById('view').innerHTML = xhr.responseText;
-			loadAuthorHomeInfo();
+			loadHomeInfo();
 		}
 	}
 }
 
-function loadAuthorHomeInfo() {
-	console.log('in loadAuthorHomeInfo()');
+function loadHomeInfo() {
+	console.log('in loadHomeInfo()');
 	let userJSON = window.localStorage.getItem('user');
 	let user = JSON.parse(userJSON);
 	$('#user_id').html(user.id);
@@ -107,26 +107,26 @@ function loadAuthorHomeInfo() {
 	$('#user_password').html(user.password);
 }
 
-function loadAuthorProfile() {
+function loadProfile() {
 	console.log('in loadProfile()');
 	
 	let isAuth = isAuthenticated();
 	updateNav(isAuth);
 	if(!isAuth) {
-		loadAuthorLogin();
+		loadLogin();
 		e.stopImmediatePropagation();
 	}
 }
 
-function loadAuthorLoginInfo() {
-	console.log('in loadAuthorLoginInfo()');
+function loadLoginInfo() {
+	console.log('in loadLoginInfo()');
 	
 	$('#login-message').hide();
 	$('#login').on('click', login);
-	$('#toRegisterBtn').on('click', loadAuthorRegister);
+	$('#toRegisterBtn').on('click', loadRegister);
 }
 
-function loginAuthor() {
+function login() {
 	console.log('in login()');
 	
 	let username = $('#login-username').val();
@@ -138,6 +138,7 @@ function loginAuthor() {
 	let xhr = new XMLHttpRequest();
 	
 	xhr.open('POST', 'login', true);
+	
 	xhr.send(credentialsJSON);
 	
 	xhr.onreadystatechange = function() {
@@ -146,7 +147,7 @@ function loginAuthor() {
 			if(user) {
 				alert('Login successful!');
 				window.localStorage.setItem('user', xhr.responseText);
-				loadAuthorHome();
+				loadHome();
 				console.log(`User id: ${user.id} login successful`);
 			} else {
 				$('#login-message').show();
@@ -168,13 +169,13 @@ function logout() {
 	xhr.onreadystatechange = function() {
 		if(xhr.readyState == 4 && xhr.status == 200) {
 			console.log('Session has been invalidated!');
-			loadAuthorLogin();
+			loadLogin();
 		}
 	}
 }
 
-function loadAuthorRegisterInfo() {
-	console.log('in loadAuthorRegisterInfo()');
+function loadRegisterInfo() {
+	console.log('in loadRegisterInfo()');
 	
 	$('#reg-message').hide();
 	
@@ -265,8 +266,8 @@ function validateEmail() {
 	}
 }
 
-function registerAuthor() {
-	console.log('in registerAuthor()');
+function register() {
+	console.log('in register()');
 	
 	$('#register').attr('disabled', true);
 	
@@ -293,7 +294,7 @@ function registerAuthor() {
 			} else {
 				$('#message').hide();
 				alert('Enrollment successful! Please login using your credentials.');
-				loadAuthorLogin();
+				loadLogin();
 			}
 		}
 	}
