@@ -20,6 +20,9 @@ public class RequestViewHelper {
 		case "/Project1/resolver_home.view":
 			return "partials/resolverhome.html";
 			
+		case "/Project1/author_pastrequests.view":
+			return "partials/authorpastrequests.html";
+			
 		default:
 			return null;
 			
