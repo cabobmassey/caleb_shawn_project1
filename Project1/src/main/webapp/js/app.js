@@ -315,8 +315,7 @@ function isCreateTicketFormValid() {
 }
 
 function createTicket() {
-	const createTicketErrorMessage = document.getElementById('reg-message');
-	const createTicketSuccessMesssage = document.getElementById('reimbursement_success_message');
+	
 	let userJSON = window.localStorage.getItem('user');
 	let user = JSON.parse(userJSON);
 	let typeId = checkTypeId();
@@ -345,17 +344,12 @@ function createTicket() {
 			$('#description-input').attr('disabled', true);
 			$('#type-input').attr('disabled', true);
 			if(xhr.responseText == 'false') {
-				createTicketErrorMessage.removeAttribute('hidden');
-				createTicketErrorMessage.innerHTML = 'Reimbursement request was not successful';
-				createTicketSuccessMesssage.setAttribute('hidden', true);
 				alert("Reimbursement Request NOT Successful")
 				loadHome(user.userRoleId);
 				
 			} else if (xhr.responseText == 'true')  {
-				createTicketErrorMessage.setAttribute('hidden', true);
-				createTicketSuccessMesssage.removeAttribute('hidden');
-				createTicketSuccessMesssage.innerHTML = 'Reimbursement request submitted successfully';
-				alert("Reimbursement Request Successful")
+				alert("Reimbursement Request Successful");
+				$('#submit-request').attr('disabled', true);
 				loadHome(user.userRoleId);
 			}
 		}
