@@ -32,14 +32,14 @@ function login() {
 	xhr.onreadystatechange = function() {
 		if (xhr.readyState == 4 && xhr.status == 200) {
 			let user = JSON.parse(xhr.responseText);
-			console.log(user);
 			if (user) {
+				console.log(user);
 				alert('Login successful!');
 				window.localStorage.setItem('user', xhr.responseText);
 				loadHome(user.userRoleId);
 			} else {
 				$('#login-message').show();
-				$('#login-message').html('Invalid credentials');
+				$('#login-message').html('Invalid Credentials');
 			}
 		}
 	}
@@ -91,20 +91,19 @@ function loadAuthorHomeInfo() {
 	let user = JSON.parse(userJSON);
 	$('#user_fn').html(user.firstName);
 	
-//	$('#submit-new-req-btn').on(/*go to submit new request*/);
+	$('#submit-new-req-btn').click(loadCreateTicket);
 	$('#req-history-btn').click(loadViewPastRequests);
-	
 }
 
 function loadViewPastRequests(){
 	console.log('in loadViewPastRequests()');
-	
+
 	let isAuth = isAuthenticated();
 	updateNav(isAuth);
 
 	let xhr = new XMLHttpRequest();
-	
-	xhr.open('GET', 'author_pastrequests.view', true);
+
+	xhr.open('GET', 'view_past_tickets.view', true);
 
 	xhr.send();
 
@@ -114,28 +113,99 @@ function loadViewPastRequests(){
 			loadViewPastRequestsInfo();
 		}
 	}
-
 }
 
 function loadViewPastRequestsInfo() {
-	console.log('in loadViewPastRequestsInfo()');
+	const pastTicketErrorMessage = document.getElementById('past-requests-message');
 	let userJSON = window.localStorage.getItem('user');
 	let user = JSON.parse(userJSON);
+	let authorId = user.userId;
+	let authorIdJSON = JSON.stringify(authorId);
 	$('#user_fn').html(user.firstName);
+	
+	let xhr = new XMLHttpRequest();
+
+	xhr.open('POST', 'view_past_tickets', true);
+
+	xhr.send(authorIdJSON);
+	
+	xhr.onreadystatechange = function(){
+		if (xhr.readyState == 4 && xhr.status == 200) {
+			let ticketData = JSON.parse(xhr.responseText);
+			// add rows to the already created table containing all reimbursement requests for a particular user
+			if (ticketData.length != 0){
+				pastTicketErrorMessage.setAttribute('hidden', true);
+				for (let i = 0; i < ticketData.length; i++){
+					// dynamically create table row and data cells
+				    let row = document.createElement('tr');
+				    let reimbIdCell = document.createElement('td');
+				    let reimbAmountCell = document.createElement('td');
+				    let reimbSubmittedCell = document.createElement('td');
+				    let reimbResolvedCell = document.createElement('td');
+				    let reimbDescriptionCell = document.createElement('td');
+				    let reimbReceiptCell = document.createElement('td');
+				    let reimbAuthorCell = document.createElement('td');
+				    let reimbResolverCell = document.createElement('td');
+				    let reimbStatusIdCell = document.createElement('td');
+				    let reimbTypeIdCell = document.createElement('td');
+
+				    // append the newly created table cells to the new row
+				    row.appendChild(reimbIdCell);
+				    row.appendChild(reimbAmountCell);
+				    row.appendChild(reimbSubmittedCell);
+				    row.appendChild(reimbResolvedCell);
+				    row.appendChild(reimbDescriptionCell);
+				    row.appendChild(reimbReceiptCell);
+				    row.appendChild(reimbAuthorCell);
+				    row.appendChild(reimbResolverCell);
+				    row.appendChild(reimbStatusIdCell);
+				    row.appendChild(reimbTypeIdCell);
+
+				    let tbody = document.getElementById('past_request_table_body');
+				    
+				    // append the row to our pre-existing table
+				    tbody.appendChild(row);
+				    
+				    reimbIdCell.innerText = ticketData[i].reimb_id;
+				    reimbAmountCell.innerText = ticketData[i].reimb_amount;
+				    reimbSubmittedCell.innerText = ticketData[i].reimb_submitted;
+				    reimbResolvedCell.innerText = ticketData[i].reimb_resolved;
+				    if (ticketData[i].reimb_description != null){
+				    	 reimbDescriptionCell.innerText = ticketData[i].reimb_description;
+				    }else{
+				    	 reimbDescriptionCell.innerText = 'No Description Available'
+				    }
+				    if (ticketData[i].reimb_receipt != null){
+				    	 reimbReceiptCell.innerText = ticketData[i].reimb_receipt;
+				    }else{
+				    	 reimbReceiptCell.innerText = 'No receipt image';
+				    }
+				    reimbAuthorCell.innerText = ticketData[i].reimb_author;
+				    
+				    if (ticketData[i].reimb_resolver == 0 || ticketData[i].reimb_resolver < 0){
+				    	reimbResolverCell.innerText = 'Resolver is not valid';
+				    }else{
+				    	 reimbResolverCell.innerText = ticketData[i].reimb_resolver;
+				    }
+				   
+				    reimbStatusIdCell.innerText = ticketData[i].reimb_status_id;
+				    reimbTypeIdCell.innerText = ticketData[i].reimb_type_id;
+				}
+			}else{
+				pastTicketErrorMessage.removeAttribute('hidden');
+				pastTicketErrorMessage.innerHTML = 'No closed tickets were found';
+			}
+		}
+	}
 	
 	$('#author-return-home').click(function(){loadHome(user.userRoleId)});
 	
 }
 
 function loadProfile() {
-	console.log('in loadProfile()');
-
-	let isAuth = isAuthenticated();
-	updateNav(isAuth);
-	if (!isAuth) {
-		loadLogin();
-		e.stopImmediatePropagation();
-	}
+	let userJSON = window.localStorage.getItem('user');
+	let user = JSON.parse(userJSON);
+	loadHome(user.userRoleId);
 }
 
 function loadLogin() {
@@ -198,6 +268,112 @@ function register() {
 			}
 		}
 	}
+}
+
+function loadCreateTicket() {
+let isAuth = isAuthenticated();
+	updateNav(isAuth);
+
+	let xhr = new XMLHttpRequest();
+
+	xhr.open('GET', 'add_reimbursement.view', true);
+
+	xhr.send();
+
+	xhr.onreadystatechange = function() {
+		if (xhr.readyState == 4 && xhr.status == 200) {
+			console.log(xhr.responseText)
+			document.getElementById('view').innerHTML = xhr.responseText;
+			loadCreateTicketInfo();
+		}
+	}
+
+}
+
+function loadCreateTicketInfo() {
+	let userJSON = window.localStorage.getItem('user');
+	let user = JSON.parse(userJSON);
+	$('#submit-request').attr('disabled', true);
+	
+	$('#amount').blur(isCreateTicketFormValid);
+	$('#description-input').blur(isCreateTicketFormValid);
+	$('#type-input').blur(isCreateTicketFormValid);
+
+	
+	$('#submit-request').click(createTicket);
+	$('#author-return-home_Create_Reimb').click(function() {loadHome(user.userRoleId)});
+
+}
+
+function isCreateTicketFormValid() {
+	let form = [ $('#amount').val(), $('#description-input').val(), $('#type-input').val()];
+
+	if (!(form[0] && form[2]))
+		$('#submit-request').attr('disabled', true);
+	else
+		$('#submit-request').attr('disabled', false);
+}
+
+function createTicket() {
+	const createTicketErrorMessage = document.getElementById('reg-message');
+	const createTicketSuccessMesssage = document.getElementById('reimbursement_success_message');
+	let userJSON = window.localStorage.getItem('user');
+	let user = JSON.parse(userJSON);
+	let typeId = checkTypeId();
+	let request = {
+			reimb_amount: $('#amount').val(),
+			reimb_submitted: new Date().toUTCString(),
+			reimb_resolved: null,
+			reimb_description: $('#description-input').val(),
+			reimb_receipt: null,
+			reimb_author: user.userId,
+			reimb_status_id: 1,
+			reimb_type_id: typeId
+		}
+	
+	let requestJSON = JSON.stringify(request);
+
+	let xhr = new XMLHttpRequest();
+
+	xhr.open('POST', 'add_reimbursement', true);
+	xhr.send(requestJSON);
+
+	xhr.onreadystatechange = function() {
+		if(xhr.readyState == 4 && xhr.status == 200) {
+			$('#submit-request').attr('disabled', true);
+			$('#amount').attr('disabled', true);
+			$('#description-input').attr('disabled', true);
+			$('#type-input').attr('disabled', true);
+			if(xhr.responseText == 'false') {
+				createTicketErrorMessage.removeAttribute('hidden');
+				createTicketErrorMessage.innerHTML = 'Reimbursement request was not successful';
+				createTicketSuccessMesssage.setAttribute('hidden', true);
+				setTimeout(function(){ console.log("hello") }, 3000);
+				loadHome(user.userRoleId);
+				
+			} else if (xhr.responseText == 'true')  {
+				createTicketErrorMessage.setAttribute('hidden', true);
+				createTicketSuccessMesssage.removeAttribute('hidden');
+				createTicketSuccessMesssage.innerHTML = 'Reimbursement request submitted successfully';
+				setTimeout(function(){ console.log("hello") }, 3000);
+				loadHome(user.userRoleId);
+			}
+		}
+	}
+}
+
+function checkTypeId() {
+	let typeId = 0;
+	if ($('#type-input').val() === 'Lodging') {
+		typeId = 1;
+	} else if ($('#type-input').val() === 'Travel') {
+		typeId = 2;
+	} else if ($('#type-input').val() === 'Food') {
+		typeId = 3;
+	} else if ($('#type-input').val() === 'Other') {
+		typeId = 4;
+	}
+	return typeId;
 }
 
 function loadRegister() {
@@ -281,7 +457,6 @@ function isAuthenticated() {
 }
 
 function logout() {
-	console.log('in logout()');
 	window.localStorage.removeItem('user');
 
 	let xhr = new XMLHttpRequest();
@@ -290,7 +465,6 @@ function logout() {
 
 	xhr.onreadystatechange = function() {
 		if (xhr.readyState == 4 && xhr.status == 200) {
-			console.log('Session has been invalidated!');
 			loadLogin();
 		}
 	}

@@ -17,14 +17,14 @@ import revature.project1.utils.ConnectionFactory;
 public class ReimbursementDAOImpl implements ReimbursementDAO{
 
 	@Override
-	public ArrayList<Reimbursement> viewPastRequests(int authorId) {
+	public ArrayList<Reimbursement> viewPastTickets(int authorId) {
 		ArrayList<Reimbursement> requests = new ArrayList<Reimbursement>();
 		
 		try(Connection conn = ConnectionFactory.getInstance().getConnection();) {
 			
 			// This is a parameterized SQL query, using '?' as a placeholder for values that will
 			// be provided later.
-			String sql = "SELECT * FROM ers_reimbursement WHERE reimb_author = ?";
+			String sql = "SELECT * FROM ers_reimbursement WHERE reimb_author = ? AND reimb_status_id != 1";
 			
 			// Get the PreparedStatement object from the Connection
 			PreparedStatement pstmt = conn.prepareStatement(sql);

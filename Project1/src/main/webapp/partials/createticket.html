@@ -1,10 +1,34 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="ISO-8859-1">
-<title>Insert title here</title>
-</head>
-<body>
-
-</body>
-</html>
+<div class="container" id="request-container">
+	<form  action="" class="form" id="request-form">
+	    <h3>Create New Ticket</h3>
+	    <div class="form-group">
+	        <label for="amount">Amount</label> 
+	       <input type="number" class="form-control" id="amount" placeholder="Enter amount" min=1 step="0.01" required>
+					<small id="amount-input" class="form-text text-muted">Please
+						enter a valid $xx.xx amount.</small>
+	    </div>
+	    <div class="form-group">
+	        <label for="description-input">Description</label> 
+	         <input type="text" class="form-control" id="description-input" placeholder="Description">
+	    </div>
+	    <div class="form-group">
+	        <label for="type-input">Type</label> 
+	       <select class="form-control" id="type-input">
+						<option>Food</option>
+						<option>Lodging</option>
+						<option>Travel</option>
+						<option>Other</option>
+					</select>
+	    </div>
+	  
+	    <br>
+	   <div class="alert alert-danger text-center" id="reg-message" hidden=true></div>
+		<div class="text-success" id="reimbursement_success_message" hidden=true></div>
+    </form>
+    <br>
+ <button type="submit" type="button" class="btn btn-outline-success" id="submit-request">Submit</button>
+		<div id="author-return-home-div">
+			<button type="button" class="btn btn-success btn-block"
+				id="author-return-home_Create_Reimb">Return To Home Page</button>
+		</div>
+</div>

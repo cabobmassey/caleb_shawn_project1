@@ -18,6 +18,12 @@ import revature.project1.services.ReimbursementService;
 public class AddReimbursementRequestServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+       doPost(request, response);
+	}
+	
+	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	        ObjectMapper mapper = new ObjectMapper();
 	        ReimbursementService reimbService = new ReimbursementService();
@@ -26,6 +32,7 @@ public class AddReimbursementRequestServlet extends HttpServlet {
 	        boolean addReimbursement = reimbService.addReimbursementRequest(reimbursement.getReimb_amount(), reimbursement.getReimb_submitted(), reimbursement.getReimb_resolved(),
 	        		reimbursement.getReimb_description(), reimbursement.getReimb_receipt(), reimbursement.getReimb_author(), reimbursement.getReimb_status_id(), 
 	        		reimbursement.getReimb_type_id());
+	        System.out.println(addReimbursement);
 	        PrintWriter pw = response.getWriter();
 	        String reimbursementJSON = "";
 	        response.setContentType("application/json");

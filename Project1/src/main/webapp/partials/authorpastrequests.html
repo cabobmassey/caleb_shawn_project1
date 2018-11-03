@@ -1,4 +1,4 @@
-<div class="container" id="home-container">
+<div class="container" id="past-requests-container">
 	<div id="author-view-past-requests">
 		<h1><span id="user_fn"></span>'s Past Requests</h1>
 		<br>
@@ -18,18 +18,20 @@
 					<th>Author</th>
 					<th>Resolver</th>
 					<th>Status</th>
+					<th>Type</th>
 				</tr>
 			</thead>
 			
-			<tbody></tbody>
+			<tbody id="past_request_table_body"></tbody>
 			
 		</table>
 		</div>
 		<div id="author-menu">
 			<button type="button" class="btn btn-success btn-block" id="author-return-home">Return To Home Page</button>
 		</div>
-
+		
 		<hr>
+	<div class="alert alert-danger" id="past-requests-message" hidden></div>
 
 	</div>
 </div>

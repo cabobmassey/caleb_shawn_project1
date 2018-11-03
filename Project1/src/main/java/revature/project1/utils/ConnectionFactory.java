@@ -29,7 +29,6 @@ public class ConnectionFactory {
             
         	Class.forName("oracle.jdbc.driver.OracleDriver");
             URL fileLoc = getClass().getResource("../../../application.properties");
-            System.out.println(fileLoc);
             prop.load(new FileReader(fileLoc.getFile()));
             
             // Get a connection from the DriverManager

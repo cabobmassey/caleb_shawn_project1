@@ -12,8 +12,8 @@ public class ReimbursementService {
 	private ReimbursementDAO reimbDAO = new ReimbursementDAOImpl();
 	private UsersService userService = new UsersService();
 	
-	public ArrayList<Reimbursement> viewPastRequests(int authorId){
-		return reimbDAO.viewPastRequests(authorId);
+	public ArrayList<Reimbursement> viewPastTickets(int authorId){
+		return reimbDAO.viewPastTickets(authorId);
 	}
 	
 	public boolean addReimbursementRequest(double amount, Timestamp date_submitted, Timestamp date_resolved, String description,

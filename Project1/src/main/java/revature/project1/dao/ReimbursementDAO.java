@@ -10,7 +10,7 @@ import revature.project1.models.Reimbursement;
 
 public interface ReimbursementDAO {
 	
-	ArrayList<Reimbursement> viewPastRequests(int author);
+	ArrayList<Reimbursement> viewPastTickets(int author);
 	boolean addReimbursementRequest(double amount, Timestamp submitted,
 									Timestamp resolved, String description, Blob receipt,
 									int author, int statusId, int typeId);
