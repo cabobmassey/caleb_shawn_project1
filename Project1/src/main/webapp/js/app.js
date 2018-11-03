@@ -151,23 +151,52 @@ function loadCreateTicket() {
 function loadCreateTicketInfo() {
 
 	console.log('in loadCreateTicketInfo()');
+	
 	$('#submit-request').attr('disabled', true);
-	let userJSON = window.localStorage.getItem('user');
-	let user = JSON.parse(userJSON);
-	let request = {
-			amount : $('#amount').val(),
-			description : $('#description-input').val(),
-			type : $('#type-input').val()
-		}
 	
 	$('#amount').blur(isCreateTicketFormValid);
 	$('#description-input').blur(isCreateTicketFormValid);
 	$('#type-input').blur(isCreateTicketFormValid);
 
 	
-	$('#submit-request').click(function() {loadHome(user.userRoleId)});
-	$('#author-return-home').click(function() {loadHome(user.userRoleId)});
+	$('#submit-request').click(createTicket);
+	//$('#author-return-home').click(function() {loadHome(user.userRoleId)});
 
+}
+
+function createTicket() {
+	let userJSON = window.localStorage.getItem('user');
+	let user = JSON.parse(userJSON);
+	let typeId = checkTypeId();
+	let request = {
+			reimb_amount: $('#amount').val(),
+			reimb_submitted: Date.now(),
+			reimb_description: $('#description-input').val(),
+			reimb_author: user.userRoleId,
+			reimb_status_id: 1,
+			reimb_type_id: typeId
+		}
+	
+	let requestJSON = JSON.stringify(request);
+
+	let xhr = new XMLHttpRequest();
+
+	xhr.open('POST', 'add_reimbursement.view', true);
+	xhr.send(requestJSON);
+
+	xhr.onreadystatechange = function() {
+    
+		if(xhr.readyState == 4 && xhr.status == 200) {
+			console.log('checked ready state');
+			if(xhr.responseText == 'false') {
+				$('#reg-message').show().html('Something went wrong...');
+			} else  {
+				$('#reg-message').hide();
+				alert('Request Successful!');
+				loadHome(user.userRoleId);
+			}
+		}
+	}
 }
 
 function loadProfile() {
@@ -291,6 +320,20 @@ function checkRoleId() {
 		roleId = 2;
 	}
 	return roleId;
+}
+
+function checkTypeId() {
+	let typeId = 0;
+	if ($('#type-input').val() === 'Lodging') {
+		typeId = 1;
+	} else if ($('#type-input').val() === 'Travel') {
+		typeId = 2;
+	} else if ($('#type-input').val() === 'Food') {
+		typeId = 3;
+	} else if ($('#type-input').val() === 'Other') {
+		typeId = 4;
+	}
+	return typeId;
 }
 
 function updateNav(isAuth) {

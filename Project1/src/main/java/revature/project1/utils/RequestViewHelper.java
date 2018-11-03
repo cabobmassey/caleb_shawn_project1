@@ -26,6 +26,9 @@ public class RequestViewHelper {
 		case "/Project1/author_newticket.view":
 			return "partials/createticket.html";
 			
+		case "/Project1/add_reimbursement.view":
+			return "partials/createticketsuccess.html";
+			
 		default:
 			return null;
 			
