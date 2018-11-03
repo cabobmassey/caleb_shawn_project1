@@ -348,14 +348,14 @@ function createTicket() {
 				createTicketErrorMessage.removeAttribute('hidden');
 				createTicketErrorMessage.innerHTML = 'Reimbursement request was not successful';
 				createTicketSuccessMesssage.setAttribute('hidden', true);
-				setTimeout(function(){ console.log("hello") }, 3000);
+				alert("Reimbursement Request NOT Successful")
 				loadHome(user.userRoleId);
 				
 			} else if (xhr.responseText == 'true')  {
 				createTicketErrorMessage.setAttribute('hidden', true);
 				createTicketSuccessMesssage.removeAttribute('hidden');
 				createTicketSuccessMesssage.innerHTML = 'Reimbursement request submitted successfully';
-				setTimeout(function(){ console.log("hello") }, 3000);
+				alert("Reimbursement Request Successful")
 				loadHome(user.userRoleId);
 			}
 		}
