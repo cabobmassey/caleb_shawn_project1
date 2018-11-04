@@ -1,8 +1,7 @@
 window.onload = function() {
 	loadLogin();
 	document.getElementById('toLogin').addEventListener('click', loadLogin);
-	document.getElementById('toRegister').addEventListener('click',
-			loadRegister);
+	document.getElementById('toRegister').addEventListener('click',loadRegister);
 
 	document.getElementById('toHome').addEventListener('click', loadHome);
 	document.getElementById('toProfile').addEventListener('click', loadProfile);
@@ -77,25 +76,24 @@ function loadResolverHomeInfo() {
 	console.log('in loadResolverHomeInfo()');
 	let userJSON = window.localStorage.getItem('user');
 	let user = JSON.parse(userJSON);
-	$('#user_id').html(user.id);
+
 	$('#user_fn').html(user.firstName);
-	$('#user_ln').html(user.lastName);
-	$('#user_email').html(user.emailAddress);
-	$('#user_username').html(user.username);
-	$('#user_password').html(user.password);
+
 }
 
 function loadAuthorHomeInfo() {
 	console.log('in loadAuthorHomeInfo()');
 	let userJSON = window.localStorage.getItem('user');
 	let user = JSON.parse(userJSON);
+
 	$('#user_fn').html(user.firstName);
 	
 	$('#submit-new-req-btn').click(loadCreateTicket);
 	$('#req-history-btn').click(loadViewPastRequests);
+
 }
 
-function loadViewPastRequests(){
+function loadViewPastRequests() {
 	console.log('in loadViewPastRequests()');
 
 	let isAuth = isAuthenticated();
@@ -122,7 +120,63 @@ function loadViewPastRequestsInfo() {
 	let authorId = user.userId;
 	let authorIdJSON = JSON.stringify(authorId);
 	$('#user_fn').html(user.firstName);
+
+	$('#author-return-home').click(function() {
+		loadHome(user.userRoleId)
+	});
+
+}
+
+function loadCreateTicket() {
+
+	console.log('in loadCreateTicket()');
+
+	let isAuth = isAuthenticated();
+	updateNav(isAuth);
+
+	let xhr = new XMLHttpRequest();
+
+	xhr.open('GET', 'author_newticket.view', true);
+
+	xhr.send();
+
+	xhr.onreadystatechange = function() {
+		if (xhr.readyState == 4 && xhr.status == 200) {
+			document.getElementById('view').innerHTML = xhr.responseText;
+			loadCreateTicketInfo();
+		}
+	}
+
+}
+
+function loadCreateTicketInfo() {
+
+	console.log('in loadCreateTicketInfo()');
 	
+	$('#submit-request').attr('disabled', true);
+	
+	$('#amount').blur(isCreateTicketFormValid);
+	$('#description-input').blur(isCreateTicketFormValid);
+	$('#type-input').blur(isCreateTicketFormValid);
+
+	$('#submit-request').click(createTicket);
+	//$('#author-return-home').click(function() {loadHome(user.userRoleId)});
+
+}
+
+function createTicket() {
+	let userJSON = window.localStorage.getItem('user');
+	let user = JSON.parse(userJSON);
+	let typeId = checkTypeId();
+	let request = {
+			reimb_amount: $('#amount').val(),
+			reimb_submitted: Date.now(),
+			reimb_description: $('#description-input').val(),
+			reimb_author: user.userRoleId,
+			reimb_status_id: 1,
+			reimb_type_id: typeId
+		}
+  
 	let xhr = new XMLHttpRequest();
 
 	xhr.open('POST', 'view_past_tickets', true);
@@ -200,6 +254,26 @@ function loadViewPastRequestsInfo() {
 	
 	$('#author-return-home').click(function(){loadHome(user.userRoleId)});
 	
+	let requestJSON = JSON.stringify(request);
+
+	let xhr = new XMLHttpRequest();
+
+	xhr.open('POST', 'add_reimbursement.view', true);
+	xhr.send(requestJSON);
+
+	xhr.onreadystatechange = function() {
+    
+		if(xhr.readyState == 4 && xhr.status == 200) {
+			console.log('checked ready state');
+			if(xhr.responseText == 'false') {
+				$('#reg-message').show().html('Something went wrong...');
+			} else  {
+				$('#reg-message').hide();
+				alert('Request Successful!');
+				loadHome(user.userRoleId);
+			}
+		}
+	}
 }
 
 function loadProfile() {
@@ -401,8 +475,8 @@ function loadRegisterInfo() {
 	$('#reg-password').blur(isRegisterFormValid);
 
 	$('#reg-username').blur(validateUsername); // same as
-												// document.getElementById('reg-username').addEventListener('blur',
-												// function, boolean);
+	// document.getElementById('reg-username').addEventListener('blur',
+	// function, boolean);
 	$('#email').blur(validateEmail);
 
 	$('#register').attr('disabled', true);
@@ -418,6 +492,20 @@ function checkRoleId() {
 		roleId = 2;
 	}
 	return roleId;
+}
+
+function checkTypeId() {
+	let typeId = 0;
+	if ($('#type-input').val() === 'Lodging') {
+		typeId = 1;
+	} else if ($('#type-input').val() === 'Travel') {
+		typeId = 2;
+	} else if ($('#type-input').val() === 'Food') {
+		typeId = 3;
+	} else if ($('#type-input').val() === 'Other') {
+		typeId = 4;
+	}
+	return typeId;
 }
 
 function updateNav(isAuth) {
@@ -472,6 +560,15 @@ function isRegisterFormValid() {
 		$('#register').attr('disabled', true);
 	else
 		$('#register').attr('disabled', false);
+}
+
+function isCreateTicketFormValid() {
+	let form = [ $('#amount').val(), $('#description-input').val(), $('#type-input').val()];
+
+	if (!(form[0] && form[1] && form[2]))
+		$('#submit-request').attr('disabled', true);
+	else
+		$('#submit-request').attr('disabled', false);
 }
 
 function validateUsername() {

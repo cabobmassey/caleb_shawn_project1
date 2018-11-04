@@ -9,7 +9,7 @@ public class RequestViewHelper {
 		switch(request.getRequestURI()) {
 		
 		case "/Project1/login.view":
-			return "partials/authorlogin.html";
+			return "partials/login.html";
 		
 		case "/Project1/register.view":
 			return "partials/register.html";
@@ -23,8 +23,11 @@ public class RequestViewHelper {
 		case "/Project1/view_past_tickets.view":
 			return "partials/authorpastrequests.html";
 			
-		case "/Project1/add_reimbursement.view":
+		case "/Project1/author_newticket.view":
 			return "partials/createticket.html";
+			
+		case "/Project1/add_reimbursement.view":
+			return "partials/createticketsuccess.html";
 			
 		default:
 			return null;
