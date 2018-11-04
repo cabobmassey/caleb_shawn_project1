@@ -6,7 +6,7 @@
 			<form>
 				<div class="form-group">
 					<label for="amount-input">Amount</label> <input type="number"
-						class="form-control" id="amount" placeholder="Enter amount" step="0.01">
+						class="form-control" id="amount" placeholder="Enter amount" min="1" step="0.01">
 					<small id="amount" class="form-text text-muted">Please
 						enter a valid $xx.xx amount.</small>
 				</div>
@@ -23,22 +23,15 @@
 						<option>Travel</option>
 						<option>Other</option>
 					</select>
-				</div>
-				<button type="submit" class="btn btn-outline-success" id="submit-request">Submit</button>
-				<hr>
+        </div>
 			</form>
 		</div>
-
-		<br>
-
+	<button type="submit" class="btn btn-outline-success" id="submit-request">Submit</button>
+	<hr>
+	<br>
 		<div id="author-return-home-div">
 			<button type="button" class="btn btn-success btn-block"
-				id="author-return-home">Return To Home Page</button>
+				id="author-return-home_Create_Reimb">Return To Home Page</button>
 		</div>
-
-		<hr>
-		
-		<div class="alert alert-danger text-center" id="reg-message"></div>
-
 	</div>
 </div>

@@ -12,12 +12,16 @@ public class ReimbursementService {
 	private ReimbursementDAO reimbDAO = new ReimbursementDAOImpl();
 	private UsersService userService = new UsersService();
 	
-	public ArrayList<Reimbursement> viewPastRequests(int authorId){
-		return reimbDAO.viewPastRequests(authorId);
+	public ArrayList<Reimbursement> viewPastTickets(int authorId){
+		return reimbDAO.viewPastTickets(authorId);
 	}
 	
 	public boolean addReimbursementRequest(double amount, Timestamp date_submitted, Timestamp date_resolved, String description,
 			Blob receipt, int author, int statusId, int typeId) {
+		if (!checkAmount(amount)) {
+			return false;
+		}
+		
 		if (!checkStatusId(statusId)) {
 			return false;
 		}
@@ -56,6 +60,14 @@ public class ReimbursementService {
 		}
 		
 		return reimbDAO.filterRequests(statusId);	
+	}
+	
+	private boolean checkAmount(double amount) {
+		if (amount > 0) {
+			return true;
+		}else {
+			return false;
+		}
 	}
 	
 	private boolean checkIfUserExists(int userId) {
