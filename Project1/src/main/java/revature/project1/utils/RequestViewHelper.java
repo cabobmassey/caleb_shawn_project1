@@ -7,7 +7,6 @@ public class RequestViewHelper {
 	public static String process(HttpServletRequest request) {
 		
 		switch(request.getRequestURI()) {
-		
 		case "/Project1/login.view":
 			return "partials/authorlogin.html";
 		
