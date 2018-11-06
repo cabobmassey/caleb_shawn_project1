@@ -1,0 +1,58 @@
+<div class="container" id="resolver-requests-container">
+	<div id="resolver-view-requests">
+		<h1 class="display-4" id="title">Reimbursement history</h1>
+		<br>
+		<div>
+			<select >
+				<option></option>
+				<option></option>
+				<option></option>
+				<option>View Denied Requests</option>
+			</select>
+		</div>
+		
+		<div class="dropdown" id="change_status_dropdown">
+  			<a class="btn btn-success dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+   				 Filter Reimbursements
+  			</a>
+
+			 <div class="dropdown-menu" aria-labelledby="dropdownMenuLink"  id="resolver_change_status">
+			    <a class="dropdown-item" href="#" id="all_requests_option">View All Requests</a>
+			    <a class="dropdown-item" href="#" id="pending_requests_option">View Pending Requests</a>
+			    <a class="dropdown-item" href="#" id="accepted_requests_option">View Accepted Requests</a>
+			    <a class="dropdown-item" href="#" id="denied_requests_option">View Denied Requests</a>
+			 </div>
+		</div>
+		
+		<div>
+			<table class="table" id="author-past-requests-table">
+			
+			<thead>
+				<tr>
+					<th>Id</th>
+					<th>Amount</th>
+					<th>Time Submitted</th>
+					<th>Time Resolved</th>
+					<th>Description</th>
+					<th>Receipt</th>
+					<th>Author</th>
+					<th>Resolver</th>
+					<th>Status</th>
+					<th>Type</th>
+					<th>Action</th>
+				</tr>
+			</thead>
+			
+			<tbody id="view_reimbursement_table_body"></tbody>
+			
+		</table>
+		</div>
+		<div id="resolver-menu">
+			<button type="button" class="btn btn-success btn-block" id="resolver-return-home">Return To Home Page</button>
+		</div>
+		
+		<hr>
+	<div class="alert alert-danger" id="error-requests-message" hidden></div>
+
+	</div>
+</div>
