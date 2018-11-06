@@ -7,6 +7,7 @@
 #login-form, #registration-form {
 	margin-left: 30%;
 	margin-right: 30%;
+	margin-bottom: 10%;
 }
 
 #registration-form {
@@ -44,7 +45,7 @@ body {
 	font-family: 'Raleway', sans-serif;
 }
 
-.navbar-brand {
+#logo-image {
 	max-width: 100px;
 	max-height: 100px;
 }

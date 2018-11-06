@@ -1,10 +1,8 @@
 window.onload = function() {
 	loadLogin();
 	document.getElementById('toLogin').addEventListener('click', loadLogin);
-	document.getElementById('toRegister').addEventListener('click',
-			loadRegister);
+	document.getElementById('toRegister').addEventListener('click', loadRegister);
 
-	document.getElementById('toHome').addEventListener('click', loadHome);
 	document.getElementById('toProfile').addEventListener('click', loadProfile);
 	document.getElementById('toLogout').addEventListener('click', logout);
 
