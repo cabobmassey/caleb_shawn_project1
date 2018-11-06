@@ -165,7 +165,7 @@ ArrayList<Reimbursement> requests = new ArrayList<Reimbursement>();
 			
 			// This is a parameterized SQL query, using '?' as a placeholder for values that will
 			// be provided later.
-			String sql = "SELECT * FROM ers_reimbursement WHERE reimb_status = ?";
+			String sql = "SELECT * FROM ers_reimbursement WHERE reimb_status_id = ?";
 			
 			// Get the PreparedStatement object from the Connection
 			PreparedStatement pstmt = conn.prepareStatement(sql);

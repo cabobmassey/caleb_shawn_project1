@@ -26,9 +26,13 @@ public class RequestViewHelper {
 		case "/Project1/add_reimbursement.view":
 			return "partials/createticket.html";
 			
+		case "/Project1/filter_by_reimbursement_status.view":
+			return "partials/ResolverViewRequests.html";
+			
 		default:
 			return null;
 			
 		}
+		
 	}
 }
