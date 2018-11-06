@@ -77,12 +77,9 @@ function loadResolverHomeInfo() {
 	console.log('in loadResolverHomeInfo()');
 	let userJSON = window.localStorage.getItem('user');
 	let user = JSON.parse(userJSON);
-	$('#user_id').html(user.id);
-	$('#user_fn').html(user.firstName);
-	$('#user_ln').html(user.lastName);
-	$('#user_email').html(user.emailAddress);
-	$('#user_username').html(user.username);
-	$('#user_password').html(user.password);
+	
+	$('#submit-new-req-btn').click(loadCreateTicket);
+	$('#view-pending-btn').click(loadManagerViewRequests);
 }
 
 function loadAuthorHomeInfo() {
@@ -115,6 +112,172 @@ function loadViewPastRequests(){
 	}
 }
 
+function loadManagerViewRequests() {
+	console.log('in loadManagerViewRequests()');
+
+	let isAuth = isAuthenticated();
+	updateNav(isAuth);
+
+	let xhr = new XMLHttpRequest();
+
+	xhr.open('GET', 'filter_by_reimbursement_status.view', true);
+
+	xhr.send();
+
+	xhr.onreadystatechange = function() {
+		if (xhr.readyState == 4 && xhr.status == 200) {
+			document.getElementById('view').innerHTML = xhr.responseText;
+			loadManagerViewRequestsInfo('1');
+			document.getElementById('all_requests_option').addEventListener('click', function(e){
+				getAllReimbursements();				
+			});
+			document.getElementById('accepted_requests_option').addEventListener('click', function(e){
+				loadManagerViewRequestsInfo('2');	
+			});
+			document.getElementById('denied_requests_option').addEventListener('click', function(e){
+				loadManagerViewRequestsInfo('3');				
+			});
+			document.getElementById('pending_requests_option').addEventListener('click', function(e){
+				loadManagerViewRequestsInfo('1');				
+			});
+		}
+	}
+}
+
+function getAllReimbursements(){
+	let xhr = new XMLHttpRequest();
+	xhr.open('GET', 'view_all_tickets', true);
+	xhr.send();
+	xhr.onreadystatechange = function(){
+		if (xhr.readyState == 4 && xhr.status == 200){
+			let ticketData = JSON.parse(xhr.responseText);
+			// add rows to the already created table containing all reimbursement requests for a particular user
+			if (ticketData.length != 0){
+				addRows(ticketData);
+			}
+		}
+	}
+}
+
+function loadManagerViewRequestsInfo(statusId) {
+	console.log('in loadManagerViewRequestsInfo()');
+	
+	const errorRequestsMessage = document.getElementById('error-requests-message');
+	let userJSON = window.localStorage.getItem('user');
+	let user = JSON.parse(userJSON);
+	let statusIdJSON = JSON.stringify(statusId);
+	
+	let xhr = new XMLHttpRequest();
+
+	xhr.open('POST', 'filter_by_reimbursement_status', true);
+	xhr.setRequestHeader('Content-Type', 'application/json');
+	xhr.send(statusIdJSON);
+	
+	xhr.onreadystatechange = function(){
+		if (xhr.readyState == 4 && xhr.status == 200) {
+			let ticketData = JSON.parse(xhr.responseText);
+			// add rows to the already created table containing all reimbursement requests for a particular user
+			if (ticketData.length != 0){
+				errorRequestsMessage.setAttribute('hidden', true);
+				addRows(ticketData);
+			}else{
+				errorRequestsMessage.removeAttribute('hidden');
+				errorRequestsMessage.innerHTML = 'No pending reimbursements';
+			}
+		}
+	}
+	
+	$('#resolver-return-home').click(function(){loadHome(user.userRoleId)});
+	
+}
+
+function addRows(ticketData){
+	
+	let userJSON = window.localStorage.getItem('user');
+	let user = JSON.parse(userJSON);
+	
+	for (let i = 0; i < ticketData.length; i++){
+		// dynamically create table row and data cells
+	    let row = document.createElement('tr');
+	    let reimbIdCell = document.createElement('td');
+	    let reimbAmountCell = document.createElement('td');
+	    let reimbSubmittedCell = document.createElement('td');
+	    let reimbResolvedCell = document.createElement('td');
+	    let reimbDescriptionCell = document.createElement('td');
+	    let reimbReceiptCell = document.createElement('td');
+	    let reimbAuthorCell = document.createElement('td');
+	    let reimbResolverCell = document.createElement('td');
+	    let reimbStatusIdCell = document.createElement('td');
+	    let reimbTypeIdCell = document.createElement('td');
+	    let actionCell = document.createElement('td');
+
+	    // append the newly created table cells to the new row
+	    row.appendChild(reimbIdCell);
+	    row.appendChild(reimbAmountCell);
+	    row.appendChild(reimbSubmittedCell);
+	    row.appendChild(reimbResolvedCell);
+	    row.appendChild(reimbDescriptionCell);
+	    row.appendChild(reimbReceiptCell);
+	    row.appendChild(reimbAuthorCell);
+	    row.appendChild(reimbResolverCell);
+	    row.appendChild(reimbStatusIdCell);
+	    row.appendChild(reimbTypeIdCell);
+	    row.appendChild(actionCell);
+	    
+	    /*if(ticketData[i].reimb_status_id == 1 && user.userRoleId == 2){
+	    	let approveBtn = document.createElement('button');
+	    	let denyBtn = document.createElement('button');
+	    	approveBtn.className = 'btn btn-success btn-sm';
+	    	denyBtn.className = 'btn btn-danger btn-sm';
+	    	approveBtn.innerHTML = 'Approve';
+	    	denyBtn.innerHTML = 'Deny';
+	    	approveBtn.addEventListener('click', approveRequest);
+	    	denyBtn.addEventListener('click', denyRequest);
+	    	actionCell.appendChild(approveBtn);
+	    	actionCell.appendChild(denyBtn);
+	    	
+	    } else {
+	    	actionCell.InnerText = 'Already processed';
+	    }*/
+	    
+	    let tbody;
+	    
+	    if(user.userRoleId == 1){
+	    	tbody = document.getElementById('past_request_table_body');
+	    } else {
+	    	tbody = document.getElementById('author-past-requests-table');
+	    }
+	    
+	    // append the row to our pre-existing table
+	    tbody.appendChild(row);
+	    
+	    reimbIdCell.innerText = ticketData[i].reimb_id;
+	    reimbAmountCell.innerText = ticketData[i].reimb_amount;
+	    reimbSubmittedCell.innerText = ticketData[i].reimb_submitted;
+	    reimbResolvedCell.innerText = ticketData[i].reimb_resolved;
+	    if (ticketData[i].reimb_description != null){
+	    	 reimbDescriptionCell.innerText = ticketData[i].reimb_description;
+	    }else{
+	    	 reimbDescriptionCell.innerText = 'No Description Available'
+	    }
+	    if (ticketData[i].reimb_receipt != null){
+	    	 reimbReceiptCell.innerText = ticketData[i].reimb_receipt;
+	    }else{
+	    	 reimbReceiptCell.innerText = 'No receipt image';
+	    }
+	    reimbAuthorCell.innerText = ticketData[i].reimb_author;
+	    
+	    if (ticketData[i].reimb_resolver == 0 || ticketData[i].reimb_resolver < 0){
+	    	reimbResolverCell.innerText = 'Resolver is not valid';
+	    }else{
+	    	 reimbResolverCell.innerText = ticketData[i].reimb_resolver;
+	    }
+	   
+	    reimbStatusIdCell.innerText = ticketData[i].reimb_status_id;
+	    reimbTypeIdCell.innerText = ticketData[i].reimb_type_id;
+	}
+}
+
 function loadViewPastRequestsInfo() {
 	const pastTicketErrorMessage = document.getElementById('past-requests-message');
 	let userJSON = window.localStorage.getItem('user');
@@ -135,62 +298,7 @@ function loadViewPastRequestsInfo() {
 			// add rows to the already created table containing all reimbursement requests for a particular user
 			if (ticketData.length != 0){
 				pastTicketErrorMessage.setAttribute('hidden', true);
-				for (let i = 0; i < ticketData.length; i++){
-					// dynamically create table row and data cells
-				    let row = document.createElement('tr');
-				    let reimbIdCell = document.createElement('td');
-				    let reimbAmountCell = document.createElement('td');
-				    let reimbSubmittedCell = document.createElement('td');
-				    let reimbResolvedCell = document.createElement('td');
-				    let reimbDescriptionCell = document.createElement('td');
-				    let reimbReceiptCell = document.createElement('td');
-				    let reimbAuthorCell = document.createElement('td');
-				    let reimbResolverCell = document.createElement('td');
-				    let reimbStatusIdCell = document.createElement('td');
-				    let reimbTypeIdCell = document.createElement('td');
-
-				    // append the newly created table cells to the new row
-				    row.appendChild(reimbIdCell);
-				    row.appendChild(reimbAmountCell);
-				    row.appendChild(reimbSubmittedCell);
-				    row.appendChild(reimbResolvedCell);
-				    row.appendChild(reimbDescriptionCell);
-				    row.appendChild(reimbReceiptCell);
-				    row.appendChild(reimbAuthorCell);
-				    row.appendChild(reimbResolverCell);
-				    row.appendChild(reimbStatusIdCell);
-				    row.appendChild(reimbTypeIdCell);
-
-				    let tbody = document.getElementById('past_request_table_body');
-				    
-				    // append the row to our pre-existing table
-				    tbody.appendChild(row);
-				    
-				    reimbIdCell.innerText = ticketData[i].reimb_id;
-				    reimbAmountCell.innerText = ticketData[i].reimb_amount;
-				    reimbSubmittedCell.innerText = ticketData[i].reimb_submitted;
-				    reimbResolvedCell.innerText = ticketData[i].reimb_resolved;
-				    if (ticketData[i].reimb_description != null){
-				    	 reimbDescriptionCell.innerText = ticketData[i].reimb_description;
-				    }else{
-				    	 reimbDescriptionCell.innerText = 'No Description Available'
-				    }
-				    if (ticketData[i].reimb_receipt != null){
-				    	 reimbReceiptCell.innerText = ticketData[i].reimb_receipt;
-				    }else{
-				    	 reimbReceiptCell.innerText = 'No receipt image';
-				    }
-				    reimbAuthorCell.innerText = ticketData[i].reimb_author;
-				    
-				    if (ticketData[i].reimb_resolver == 0 || ticketData[i].reimb_resolver < 0){
-				    	reimbResolverCell.innerText = 'Resolver is not valid';
-				    }else{
-				    	 reimbResolverCell.innerText = ticketData[i].reimb_resolver;
-				    }
-				   
-				    reimbStatusIdCell.innerText = ticketData[i].reimb_status_id;
-				    reimbTypeIdCell.innerText = ticketData[i].reimb_type_id;
-				}
+				addRows(ticketData);
 			}else{
 				pastTicketErrorMessage.removeAttribute('hidden');
 				pastTicketErrorMessage.innerHTML = 'No closed tickets were found';
