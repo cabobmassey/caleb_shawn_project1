@@ -23,8 +23,7 @@ public class ReimbursementDAOImpl implements ReimbursementDAO {
 		try (Connection conn = ConnectionFactory.getInstance().getConnection();) {
 
 			// This is a parameterized SQL query, using '?' as a placeholder for values that
-			// will
-			// be provided later.
+			// will be provided later.
 			String sql = "SELECT * FROM ers_reimbursement WHERE reimb_author = ? AND reimb_status_id <> 1";
 
 			// Get the PreparedStatement object from the Connection
