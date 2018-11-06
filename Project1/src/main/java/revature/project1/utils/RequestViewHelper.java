@@ -9,7 +9,7 @@ public class RequestViewHelper {
 		switch(request.getRequestURI()) {
 		
 		case "/Project1/login.view":
-			return "partials/authorlogin.html";
+			return "partials/login.html";
 		
 		case "/Project1/register.view":
 			return "partials/register.html";
