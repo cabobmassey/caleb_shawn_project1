@@ -183,6 +183,7 @@ function loadManagerViewRequestsInfo(statusId) {
 			}else{
 				errorRequestsMessage.removeAttribute('hidden');
 				errorRequestsMessage.innerHTML = 'No pending reimbursements';
+				
 			}
 		}
 	}
