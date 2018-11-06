@@ -127,18 +127,18 @@ function loadManagerViewRequests() {
 	xhr.onreadystatechange = function() {
 		if (xhr.readyState == 4 && xhr.status == 200) {
 			document.getElementById('view').innerHTML = xhr.responseText;
-			loadManagerViewRequestsInfo('1');
+			loadManagerViewRequestsInfo(1);
 			document.getElementById('all_requests_option').addEventListener('click', function(e){
 				getAllReimbursements();				
 			});
 			document.getElementById('accepted_requests_option').addEventListener('click', function(e){
-				loadManagerViewRequestsInfo('2');	
+				loadManagerViewRequestsInfo(2);	
 			});
 			document.getElementById('denied_requests_option').addEventListener('click', function(e){
-				loadManagerViewRequestsInfo('3');				
+				loadManagerViewRequestsInfo(3);				
 			});
 			document.getElementById('pending_requests_option').addEventListener('click', function(e){
-				loadManagerViewRequestsInfo('1');				
+				loadManagerViewRequestsInfo(1);				
 			});
 		}
 	}
@@ -170,7 +170,7 @@ function loadManagerViewRequestsInfo(statusId) {
 	let xhr = new XMLHttpRequest();
 
 	xhr.open('POST', 'filter_by_reimbursement_status', true);
-	xhr.setRequestHeader('Content-Type', 'application/json');
+	//xhr.setRequestHeader('Content-Type', 'application/json');
 	xhr.send(statusIdJSON);
 	
 	xhr.onreadystatechange = function(){
@@ -196,6 +196,14 @@ function addRows(ticketData){
 	let userJSON = window.localStorage.getItem('user');
 	let user = JSON.parse(userJSON);
 	
+	// remove all table rows to show reimbursements based on status
+	 if(user.userRoleId == 2){
+		const resolverTable = document.getElementById('resolver-view-table');
+		while(resolverTable.rows.length > 1){
+			resolverTable.deleteRow(resolverTable.rows.length-1);
+		}
+	 }
+		
 	for (let i = 0; i < ticketData.length; i++){
 		// dynamically create table row and data cells
 	    let row = document.createElement('tr');
@@ -224,28 +232,35 @@ function addRows(ticketData){
 	    row.appendChild(reimbTypeIdCell);
 	    row.appendChild(actionCell);
 	    
-	    /*if(ticketData[i].reimb_status_id == 1 && user.userRoleId == 2){
+	    
+	    if(ticketData[i].reimb_status_id == 1 && user.userRoleId == 2){
 	    	let approveBtn = document.createElement('button');
 	    	let denyBtn = document.createElement('button');
 	    	approveBtn.className = 'btn btn-success btn-sm';
 	    	denyBtn.className = 'btn btn-danger btn-sm';
 	    	approveBtn.innerHTML = 'Approve';
 	    	denyBtn.innerHTML = 'Deny';
-	    	approveBtn.addEventListener('click', approveRequest);
-	    	denyBtn.addEventListener('click', denyRequest);
+	    	approveBtn.addEventListener('click', function(e){
+	    		changeStatus(ticketData[i].reimb_id, 2, user.userRoleId, e, denyBtn);
+	    	});
+	    	
+	    	denyBtn.addEventListener('click', function(e){
+	    		changeStatus(ticketData[i].reimb_id, 3, user.userRoleId, e, approveBtn);
+	    	});
+	    	
 	    	actionCell.appendChild(approveBtn);
 	    	actionCell.appendChild(denyBtn);
 	    	
 	    } else {
-	    	actionCell.InnerText = 'Already processed';
-	    }*/
+	    	actionCell.innerText = 'Already processed';
+	    }
 	    
 	    let tbody;
 	    
 	    if(user.userRoleId == 1){
-	    	tbody = document.getElementById('past_request_table_body');
+	    	tbody = document.getElementById('author_past_reimbursements_table_body');
 	    } else {
-	    	tbody = document.getElementById('author-past-requests-table');
+	    	tbody = document.getElementById('resolver_view_reimbursement_table_body');
 	    }
 	    
 	    // append the row to our pre-existing table
@@ -275,6 +290,44 @@ function addRows(ticketData){
 	   
 	    reimbStatusIdCell.innerText = ticketData[i].reimb_status_id;
 	    reimbTypeIdCell.innerText = ticketData[i].reimb_type_id;
+	}
+}
+
+function changeStatus(reimbursementId, statusId, resolverId, eventButton, oppositeButton){
+	eventButton.target.disabled = 'true';
+	oppositeButton.disabled = 'true';
+	let changeStatusInformation = {
+			reimb_id: reimbursementId,
+			reimb_amount: 0,
+			reimb_submitted: null,
+			reimb_resolved: null,
+			reimb_description: null,
+			reimb_receipt: null,
+			reimb_author: 0,
+			reimb_resolver: resolverId,
+			reimb_status_id: statusId,
+			reimb_type_id: 0
+		}
+	
+	let statusInformationJSON = JSON.stringify(changeStatusInformation);
+	
+	let xhr = new XMLHttpRequest();
+
+	xhr.open('POST', 'change_reimbursement_status', true);
+	xhr.send(statusInformationJSON);
+	
+	xhr.onreadystatechange = function(){
+		if (xhr.readyState == 4 && xhr.status == 200) {
+			let ticketData = JSON.parse(xhr.responseText);
+			if (ticketData){
+				alert('Reimbursement status is resolved');
+				loadManagerViewRequestsInfo(1);	
+				
+			}else{
+				alert('There was an error processing your request');
+				loadManagerViewRequestsInfo(1);	
+			}
+		}
 	}
 }
 
@@ -345,7 +398,7 @@ function loadLoginInfo() {
 
 function register() {
 	console.log('in register()');
-
+	
 	$('#register').attr('disabled', true);
 	let roleId = checkRoleId();
 	let user = {
@@ -365,8 +418,8 @@ function register() {
 	xhr.send(userJSON);
 
 	xhr.onreadystatechange = function() {
-    
 		if(xhr.readyState == 4 && xhr.status == 200) {
+			
 			if(xhr.responseText == 'false') {
 				$('#reg-message').show().html('Something went wrong...');
 			} else  {
