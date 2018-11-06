@@ -241,11 +241,11 @@ function addRows(ticketData){
 	    	approveBtn.innerHTML = 'Approve';
 	    	denyBtn.innerHTML = 'Deny';
 	    	approveBtn.addEventListener('click', function(e){
-	    		changeStatus(ticketData[i].reimb_id, 2, user.userRoleId, e);
+	    		changeStatus(ticketData[i].reimb_id, 2, user.userRoleId, e, denyBtn);
 	    	});
 	    	
 	    	denyBtn.addEventListener('click', function(e){
-	    		changeStatus(ticketData[i].reimb_id, 3, user.userRoleId, e);
+	    		changeStatus(ticketData[i].reimb_id, 3, user.userRoleId, e, approveBtn);
 	    	});
 	    	
 	    	actionCell.appendChild(approveBtn);
@@ -293,8 +293,9 @@ function addRows(ticketData){
 	}
 }
 
-function changeStatus(reimbursementId, statusId, resolverId, eventButton){
-	eventButton.disabled = 'false';
+function changeStatus(reimbursementId, statusId, resolverId, eventButton, oppositeButton){
+	eventButton.target.disabled = 'true';
+	oppositeButton.disabled = 'true';
 	let changeStatusInformation = {
 			reimb_id: reimbursementId,
 			reimb_amount: 0,
@@ -316,16 +317,15 @@ function changeStatus(reimbursementId, statusId, resolverId, eventButton){
 	xhr.send(statusInformationJSON);
 	
 	xhr.onreadystatechange = function(){
-		eventButton.disabled = 'true';
 		if (xhr.readyState == 4 && xhr.status == 200) {
 			let ticketData = JSON.parse(xhr.responseText);
 			if (ticketData){
 				alert('Reimbursement status is resolved');
-				getAllReimbursements();
+				loadManagerViewRequestsInfo(1);	
 				
 			}else{
 				alert('There was an error processing your request');
-				getAllReimbursements();
+				loadManagerViewRequestsInfo(1);	
 			}
 		}
 	}
@@ -398,7 +398,7 @@ function loadLoginInfo() {
 
 function register() {
 	console.log('in register()');
-
+	
 	$('#register').attr('disabled', true);
 	let roleId = checkRoleId();
 	let user = {
@@ -418,8 +418,8 @@ function register() {
 	xhr.send(userJSON);
 
 	xhr.onreadystatechange = function() {
-    
 		if(xhr.readyState == 4 && xhr.status == 200) {
+			
 			if(xhr.responseText == 'false') {
 				$('#reg-message').show().html('Something went wrong...');
 			} else  {
