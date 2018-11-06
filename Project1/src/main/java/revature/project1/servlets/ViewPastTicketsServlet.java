@@ -31,7 +31,9 @@ public class ViewPastTicketsServlet extends HttpServlet {
 		ObjectMapper mapper = new ObjectMapper();
 		
 		Integer author = mapper.readValue(request.getInputStream(), Integer.class);
+		System.out.println(author);
 		ArrayList<Reimbursement> pastAuthorRequests = reimbService.viewPastTickets(author);
+		System.out.println(pastAuthorRequests.size());
 		PrintWriter pw = response.getWriter();
 		response.setContentType("application/json");
 		String pastRequestsJSON = mapper.writeValueAsString(pastAuthorRequests);

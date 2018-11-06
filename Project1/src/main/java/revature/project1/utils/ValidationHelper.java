@@ -20,15 +20,15 @@ public class ValidationHelper {
 		case "/Project1/username.validate": 
 			String username = mapper.readValue(request.getInputStream(), String.class);
 			
-			if(userService.isUsernameAvailable(username)) return username;
-			else return null;
+			if(userService.isUsernameAvailable(username)) return null;
+			else return username;
 			
 		case "/Project1/email.validate":
 			System.out.println("entered email validation");
 			String emailAddress = mapper.readValue(request.getInputStream(), String.class);
 			
-			if(userService.isEmailAvailable(emailAddress)) return emailAddress;
-			else return null;
+			if(userService.isEmailAvailable(emailAddress)) return null;
+			else return emailAddress;
 			
 		default:
 			return null;

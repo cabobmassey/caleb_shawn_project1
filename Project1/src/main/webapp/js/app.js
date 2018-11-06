@@ -356,7 +356,7 @@ function register() {
 		password : $('#reg-password').val(),
 		userRoleId : roleId
 	}
-
+	
 	let userJSON = JSON.stringify(user);
 
 	let xhr = new XMLHttpRequest();
@@ -605,8 +605,10 @@ function validateUsername() {
 					$('#reg-message').html(
 							'Username is already in use! Please try another!');
 					$('#register').attr('disabled', true);
+					return false;
 				} else {
 					$('#reg-message').hide();
+					return true;
 				}
 
 			}
@@ -636,8 +638,10 @@ function validateEmail() {
 					$('#reg-message').html(
 							'Email is already in use! Please try another!');
 					$('#register').attr('disabled', true);
+					return false;
 				} else {
 					$('#reg-message').hide();
+					return true;
 				}
 			}
 		}

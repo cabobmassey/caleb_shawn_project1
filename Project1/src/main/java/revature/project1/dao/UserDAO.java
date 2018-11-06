@@ -10,6 +10,6 @@ public interface UserDAO {
             String  firstname, String lastname, 
             String email, int roleId);
 	boolean checkIfUserExistsById(int userId);
-	boolean getUserByUsername(String username);
-	boolean getUserByEmailAddress(String email);
+	boolean isUsernameAvailable(String username);
+	boolean isEmailAvailable(String email);
 }

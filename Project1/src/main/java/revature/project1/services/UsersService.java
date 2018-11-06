@@ -41,11 +41,11 @@ public class UsersService {
 	}
 
 	public boolean isEmailAvailable(String emailAddress) {
-		return userDAO.getUserByEmailAddress(emailAddress);
+		return userDAO.isEmailAvailable(emailAddress);
 	}
 
 	public boolean isUsernameAvailable(String username) {
-		return userDAO.getUserByUsername(username);
+		return userDAO.isUsernameAvailable(username);
 	}
 
 }
