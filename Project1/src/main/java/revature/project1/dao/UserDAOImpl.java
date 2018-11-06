@@ -145,15 +145,18 @@ public class UserDAOImpl implements UserDAO {
 		return true;
 	}
 
-	public boolean getUserByUsername(String username) {
+	public boolean isUsernameAvailable(String username) {
 
 		try (Connection conn = ConnectionFactory.getInstance().getConnection();) {
 			String getUsername = "SELECT ers_username FROM ers_users WHERE ers_username = ?";
 			PreparedStatement pstmt = conn.prepareStatement(getUsername);
 			pstmt.setString(1, getUsername);
-			;
+			
 			ResultSet rs = pstmt.executeQuery();
+			
+			// if the query returns a result, the username is not available
 			if (rs.next()) {
+				conn.close();
 				return false;
 			}
 
@@ -167,15 +170,18 @@ public class UserDAOImpl implements UserDAO {
 
 	}
 
-	public boolean getUserByEmailAddress(String emailAddress) {
+	public boolean isEmailAvailable(String emailAddress) {
 
 		try (Connection conn = ConnectionFactory.getInstance().getConnection();) {
 			String getEmail = "SELECT user_email FROM ers_users WHERE user_email = ?";
 			PreparedStatement pstmt = conn.prepareStatement(getEmail);
 			pstmt.setString(1, getEmail);
-			;
+			
 			ResultSet rs = pstmt.executeQuery();
+			
+			// if the query returns a result, the email is not available
 			if (rs.next()) {
+				conn.close();
 				return false;
 			}
 
