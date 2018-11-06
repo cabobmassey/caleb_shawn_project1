@@ -16,7 +16,7 @@ import revature.project1.models.Reimbursement;
 import revature.project1.services.ReimbursementService;
 
 @WebServlet("/view_all_tickets")
-public class ViewAllReimbursementRequestsServlet extends HttpServlet {
+public class ViewReimbursementRequestsServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
 	@Override
