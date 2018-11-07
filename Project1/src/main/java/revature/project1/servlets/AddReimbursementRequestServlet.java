@@ -9,14 +9,19 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import revature.project1.models.Log4JTest;
 import revature.project1.models.Reimbursement;
 import revature.project1.services.ReimbursementService;
 
 @WebServlet("/add_reimbursement")
 public class AddReimbursementRequestServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	
+	final static Logger logger = Logger.getLogger(Log4JTest.class);
 	
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -32,7 +37,7 @@ public class AddReimbursementRequestServlet extends HttpServlet {
 	        boolean addReimbursement = reimbService.addReimbursementRequest(reimbursement.getReimb_amount(), reimbursement.getReimb_submitted(), reimbursement.getReimb_resolved(),
 	        		reimbursement.getReimb_description(), reimbursement.getReimb_receipt(), reimbursement.getReimb_author(), reimbursement.getReimb_status_id(), 
 	        		reimbursement.getReimb_type_id());
-	        System.out.println(addReimbursement);
+	        logger.debug("addReimbursement =  " + addReimbursement);
 	        PrintWriter pw = response.getWriter();
 	        String reimbursementJSON = "";
 	        response.setContentType("application/json");

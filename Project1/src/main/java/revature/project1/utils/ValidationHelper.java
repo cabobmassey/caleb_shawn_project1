@@ -4,11 +4,16 @@ import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.log4j.Logger;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import revature.project1.models.Log4JTest;
 import revature.project1.services.UsersService;
 
 public class ValidationHelper {
+	
+	final static Logger logger = Logger.getLogger(Log4JTest.class);
 
 	public static String process(HttpServletRequest request) throws IOException {
 		
@@ -24,7 +29,7 @@ public class ValidationHelper {
 			else return username;
 			
 		case "/Project1/email.validate":
-			System.out.println("entered email validation");
+			logger.debug("enetered email validation");
 			String emailAddress = mapper.readValue(request.getInputStream(), String.class);
 			
 			if(userService.isEmailAvailable(emailAddress)) return null;

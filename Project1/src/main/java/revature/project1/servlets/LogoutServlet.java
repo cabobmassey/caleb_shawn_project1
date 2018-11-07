@@ -9,13 +9,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
+
+import revature.project1.models.Log4JTest;
+
 @WebServlet("/logout")
 public class LogoutServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	
+	final static Logger logger = Logger.getLogger(Log4JTest.class);
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("Request sent to LogoutServlet.doGet()");
+		logger.info("Request sent to LogoutServlet.doGet()");
 		
 		if(request.getSession(false) == null)
 			response.sendRedirect("index.html");

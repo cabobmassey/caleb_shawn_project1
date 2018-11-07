@@ -15,8 +15,8 @@ window.onload = function() {
 function login() {
 	console.log('in login()');
 
-	let username = $('#login-username').val();
-	let password = $('#login-password').val();
+	let username = document.getElementById('login-username').value;
+	let password = document.getElementById('login-password').value;
 
 	let credentials = [ username, password ];
 	let credentialsJSON = JSON.stringify(credentials);
