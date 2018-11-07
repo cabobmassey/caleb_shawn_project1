@@ -33,7 +33,7 @@ public class ReimbursementTests {
 	
 	@Test
 	public void testChangeReimbursementStatus() {
-		assertEquals(true, reimbService.changeReimbursementStatus(6, 2, 26));
+		assertEquals(true, reimbService.changeReimbursementStatus(107, 2, 22));
 	}
 	
 }
