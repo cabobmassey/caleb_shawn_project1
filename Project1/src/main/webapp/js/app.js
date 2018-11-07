@@ -200,8 +200,6 @@ function loadManagerViewRequestsInfo(statusId) {
 function addRows(ticketData){
 	let userJSON = window.localStorage.getItem('user');
 	let user = JSON.parse(userJSON);
-	let subDate = new Date(0);
-	let resDate = new Date(0);
 	 
 	if(user.userRoleId == 2){
 			const resolverTable = document.getElementById('resolver-view-table');
@@ -278,10 +276,12 @@ function addRows(ticketData){
 	    
 	    reimbIdCell.innerText = ticketData[i].reimb_id;
 	    reimbAmountCell.innerText =  ticketData[i].reimb_amount;
-	    subDate.setUTCSeconds(ticketData[i].reimb_submitted);
-	    reimbSubmittedCell.innerText = subDate;
-	    resDate.setUTCSeconds(ticketData[i].reimb_resolved);
-	    reimbResolvedCell.innerText = resDate;
+	    reimbSubmittedCell.innerText = new Date(ticketData[i].reimb_submitted);
+	    if(!ticketData[i].reimb_resolved){
+	    	reimbResolvedCell.innerText = "PENDING";
+	    } else{
+	 	    reimbResolvedCell.innerText = new Date(ticketData[i].reimb_resolved);	
+	    }
 	    if (ticketData[i].reimb_description != null){
 	    	 reimbDescriptionCell.innerText = ticketData[i].reimb_description;
 	    }else{
