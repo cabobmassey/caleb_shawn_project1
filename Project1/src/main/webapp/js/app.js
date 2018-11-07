@@ -185,7 +185,7 @@ function loadManagerViewRequestsInfo(statusId) {
 			}else{
 				addRows(ticketData);
 				errorRequestsMessage.removeAttribute('hidden');
-				errorRequestsMessage.innerHTML = 'No pending reimbursements';
+				errorRequestsMessage.innerHTML = 'No reimbursements found';
 				
 			}
 		}
