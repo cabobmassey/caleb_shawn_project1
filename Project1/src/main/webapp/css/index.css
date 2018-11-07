@@ -7,26 +7,45 @@
 #login-form, #registration-form {
 	margin-left: 30%;
 	margin-right: 30%;
+	margin-bottom: 10%;
 }
 
 #registration-form {
-	margin-top: 9%
+	margin-top: 9%;
+	margin-bottom: 9%;
 }
 
 #login-form {
-	margin-top: 10%
+	margin-top: 10%;
 }
 
-#home-page {
+#authorhome-page, #resolver_home_page {
 	margin-top: 9%;
 	margin-left: 3%;
-	margin-right: 3%
+	margin-right: 3%;
+	margin-bottom: 9%;
 }
 
-#title{
+#author-create-ticket, #author-view-past-requests, #resolver-view-requests {
+	margin-top: 7%;
+	margin-left: 3%;
+	margin-right: 3%;
+	margin-bottom: 9%;
+}
+
+#title {
 	text-align: center;
 }
 
-#submit-new-req-btn, #req-history-btn {
-	width: 49%
+#submit-new-req-btn, #req-history-btn, #view-pending-btn, #submit-new-req-btn {
+	width: 49%;
+}
+
+body {
+	font-family: 'Raleway', sans-serif;
+}
+
+#logo-image {
+	max-width: 100px;
+	max-height: 100px;
 }
