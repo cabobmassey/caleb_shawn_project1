@@ -27,10 +27,15 @@ public class ValidationServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		logger.info("Request sent to ValidationServlet.doPost()");
 		
-		String validatedInput = ValidationHelper.process(request);
+		boolean validatedInput = ValidationHelper.process(request);
 		
 		ObjectMapper mapper = new ObjectMapper();
-		String validatedJSON = mapper.writeValueAsString(validatedInput);
+		String validatedJSON = "";
+		if (validatedInput) {
+			validatedJSON = mapper.writeValueAsString(Boolean.TRUE);
+		}else {
+			validatedJSON = mapper.writeValueAsString(Boolean.FALSE);
+		}
 		
 		PrintWriter pw = response.getWriter();
 		response.setContentType("application/json");

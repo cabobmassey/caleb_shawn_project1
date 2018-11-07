@@ -10,6 +10,8 @@ window.onload = function() {
 	// authenticated
 	let isAuth = isAuthenticated();
 	updateNav(isAuth);
+	let vUsername = false;
+	let vEmail = false;
 }
 
 function login() {
@@ -143,6 +145,8 @@ function loadManagerViewRequests() {
 }
 
 function getAllReimbursements(){
+	const errorRequestsMessage = document.getElementById('error-requests-message');
+	errorRequestsMessage.setAttribute('hidden', true);
 	let xhr = new XMLHttpRequest();
 	xhr.open('GET', 'view_all_tickets', true);
 	xhr.send();
@@ -158,9 +162,10 @@ function getAllReimbursements(){
 }
 
 function loadManagerViewRequestsInfo(statusId) {
+	const errorRequestsMessage = document.getElementById('error-requests-message');
+	errorRequestsMessage.setAttribute('hidden', true);
 	console.log('in loadManagerViewRequestsInfo()');
 	
-	const errorRequestsMessage = document.getElementById('error-requests-message');
 	let userJSON = window.localStorage.getItem('user');
 	let user = JSON.parse(userJSON);
 	let statusIdJSON = JSON.stringify(statusId);
@@ -176,9 +181,9 @@ function loadManagerViewRequestsInfo(statusId) {
 			let ticketData = JSON.parse(xhr.responseText);
 			// add rows to the already created table containing all reimbursement requests for a particular user
 			if (ticketData.length != 0){
-				errorRequestsMessage.setAttribute('hidden', true);
 				addRows(ticketData);
 			}else{
+				addRows(ticketData);
 				errorRequestsMessage.removeAttribute('hidden');
 				errorRequestsMessage.innerHTML = 'No pending reimbursements';
 				
@@ -194,14 +199,17 @@ function addRows(ticketData){
 	
 	let userJSON = window.localStorage.getItem('user');
 	let user = JSON.parse(userJSON);
-	
-	// remove all table rows to show reimbursements based on status
-	 if(user.userRoleId == 2){
-		const resolverTable = document.getElementById('resolver-view-table');
-		while(resolverTable.rows.length > 1){
-			resolverTable.deleteRow(resolverTable.rows.length-1);
-		}
-	 }
+	 
+	if(user.userRoleId == 2){
+			const resolverTable = document.getElementById('resolver-view-table');
+			const resolverTableBody = document.getElementById('resolver_view_reimbursement_table_body');
+			resolverTable.removeChild(resolverTableBody);
+			const newResolverTableBody = document.createElement('tbody');
+			newResolverTableBody.id = 'resolver_view_reimbursement_table_body';
+			resolverTable.appendChild(newResolverTableBody);
+	}
+	 
+	 
 		
 	for (let i = 0; i < ticketData.length; i++){
 		// dynamically create table row and data cells
@@ -422,6 +430,7 @@ function register() {
 			if(xhr.responseText == 'false') {
 				$('#reg-message').show().html('Something went wrong...');
 			} else  {
+				$('#register').attr('disabled', false);
 				$('#reg-message').hide();
 				alert('Enrollment successful! Please login using your credentials.');
 				loadLogin();
@@ -466,9 +475,10 @@ function loadCreateTicketInfo() {
 }
 
 function isCreateTicketFormValid() {
+	
 	let form = [ $('#amount').val(), $('#description-input').val(), $('#type-input').val()];
 
-	if (!(form[0] && form[2]))
+	if (!(form[0] && form[2]) )
 		$('#submit-request').attr('disabled', true);
 	else
 		$('#submit-request').attr('disabled', false);
@@ -530,46 +540,6 @@ function checkTypeId() {
 	return typeId;
 }
 
-function loadRegister() {
-	console.log('in loadRegister()');
-
-	let isAuth = isAuthenticated();
-	updateNav(isAuth);
-
-	let xhr = new XMLHttpRequest();
-
-	xhr.open('GET', 'register.view', true);
-	xhr.send();
-
-	xhr.onreadystatechange = function() {
-		if (xhr.readyState == 4 && xhr.status == 200) {
-			document.getElementById('view').innerHTML = xhr.responseText;
-			loadRegisterInfo();
-		}
-	}
-}
-
-function loadRegisterInfo() {
-	console.log('in loadRegisterInfo()');
-
-	$('#reg-message').hide();
-
-	$('#fn').blur(isRegisterFormValid);
-	$('#ln').blur(isRegisterFormValid);
-	$('#email').blur(isRegisterFormValid);
-	$('#reg-username').blur(isRegisterFormValid);
-	$('#reg-password').blur(isRegisterFormValid);
-
-	$('#reg-username').blur(validateUsername); // same as
-												// document.getElementById('reg-username').addEventListener('blur',
-												// function, boolean);
-	$('#email').blur(validateEmail);
-
-	$('#register').attr('disabled', true);
-	$('#register').on('click', register);
-
-}
-
 function checkRoleId() {
 	let roleId = 0;
 	if ($('#user-role').val() === 'Author') {
@@ -624,14 +594,64 @@ function logout() {
 	}
 }
 
-function isRegisterFormValid() {
-	let form = [ $('#fn').val(), $('#ln').val(), $('#email').val(),
-			$('#reg-username').val(), $('#reg-password').val() ];
+function loadRegister() {
+	console.log('in loadRegister()');
 
-	if (!(form[0] && form[1] && form[2] && form[3] && form[4]))
-		$('#register').attr('disabled', true);
-	else
-		$('#register').attr('disabled', false);
+	let isAuth = isAuthenticated();
+	updateNav(isAuth);
+
+	let xhr = new XMLHttpRequest();
+
+	xhr.open('GET', 'register.view', true);
+	xhr.send();
+
+	xhr.onreadystatechange = function() {
+		if (xhr.readyState == 4 && xhr.status == 200) {
+			document.getElementById('view').innerHTML = xhr.responseText;
+			loadRegisterInfo();
+		}
+	}
+}
+
+
+function loadRegisterInfo() {
+	console.log('in loadRegisterInfo()');
+	$('#register').attr('disabled', true);
+	$('#register').on('click', register);
+	$('#reg-message').hide();
+
+	$('#fn').blur(isRegisterFormValid);
+	$('#ln').blur(isRegisterFormValid);
+	$('#email').blur(isRegisterFormValid);
+	$('#reg-username').blur(isRegisterFormValid);
+	$('#reg-password').blur(isRegisterFormValid);
+
+	$('#reg-username').blur(validateUsername); // same as
+												// document.getElementById('reg-username').addEventListener('blur',
+												// function, boolean);
+	$('#email').blur(validateEmail);
+
+}
+
+function isRegisterFormValid() {
+	let errorMessage = document.getElementById('reg-message');
+	let registerBtn = document.getElementById('register');
+	let firstName = document.getElementById('fn');
+	let lastName = document.getElementById('ln');
+	let email = document.getElementById('email');
+	let username = document.getElementById('reg-username');
+	let password = document.getElementById('reg-password');
+	let form = [ firstName.value, lastName.value, email.value, username.value, password.value ];
+
+	if ((form[0] && form[1] && form[2] && form[3] && form[4])){
+		if (vUsername){
+			if (vEmail){
+				registerBtn.removeAttribute('disabled');
+			}
+		}
+	}else{
+		registerBtn.setAttribute('disabled', true);
+	}
 }
 
 function validateUsername() {
@@ -639,8 +659,8 @@ function validateUsername() {
 
 	let username = $('#reg-username').val();
 	console.log(username);
-
-	if (username !== '') {
+	
+	if (username) {
 		let usernameJSON = JSON.stringify(username);
 		let xhr = new XMLHttpRequest();
 
@@ -654,13 +674,10 @@ function validateUsername() {
 				let username = JSON.parse(xhr.responseText);
 				if (!username) {
 					$('#reg-message').show();
-					$('#reg-message').html(
-							'Username is already in use! Please try another!');
-					$('#register').attr('disabled', true);
-					return false;
+					$('#reg-message').html('Username is already in use! Please try another!');
 				} else {
+					vUsername = true;
 					$('#reg-message').hide();
-					return true;
 				}
 
 			}
@@ -668,11 +685,22 @@ function validateUsername() {
 	}
 }
 
+
+
+function validEmailFormat(){
+	let email = document.getElementById('email');
+	const emailRegex = /\S+@\S+/;
+	if (emailRegex.test(email.value)){
+		return true;
+	}else{
+		return false;
+	}
+}
+
 function validateEmail() {
 	console.log('in validateEmail()');
 
 	let email = $('#email').val();
-
 	if (email) {
 		let emailJSON = JSON.stringify(email);
 		let xhr = new XMLHttpRequest();
@@ -685,17 +713,25 @@ function validateEmail() {
 			if (xhr.readyState == 4 && xhr.status == 200) {
 				console.log(xhr.responseText);
 				let email = JSON.parse(xhr.responseText);
-				if (!email) {
+				if (!validEmailFormat()){
 					$('#reg-message').show();
-					$('#reg-message').html(
-							'Email is already in use! Please try another!');
-					$('#register').attr('disabled', true);
-					return false;
+					$('#reg-message').html('Please enter a valid email');
+				}else if (!email && validEmailFormat()) {
+					$('#reg-message').show();
+					$('#reg-message').html('Email is already in use! Please try another!');
 				} else {
+					vEmail = true;
 					$('#reg-message').hide();
-					return true;
 				}
 			}
 		}
 	}
 }
+
+
+
+
+
+
+
+

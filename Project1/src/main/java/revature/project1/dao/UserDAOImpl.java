@@ -158,7 +158,7 @@ public class UserDAOImpl implements UserDAO {
 		try (Connection conn = ConnectionFactory.getInstance().getConnection();) {
 			String getUsername = "SELECT ers_username FROM ers_users WHERE ers_username = ?";
 			PreparedStatement pstmt = conn.prepareStatement(getUsername);
-			pstmt.setString(1, getUsername);
+			pstmt.setString(1, username);
 			
 			ResultSet rs = pstmt.executeQuery();
 			
@@ -183,7 +183,7 @@ public class UserDAOImpl implements UserDAO {
 		try (Connection conn = ConnectionFactory.getInstance().getConnection();) {
 			String getEmail = "SELECT user_email FROM ers_users WHERE user_email = ?";
 			PreparedStatement pstmt = conn.prepareStatement(getEmail);
-			pstmt.setString(1, getEmail);
+			pstmt.setString(1, emailAddress);
 			
 			ResultSet rs = pstmt.executeQuery();
 			

@@ -15,7 +15,7 @@ public class ValidationHelper {
 	
 	final static Logger logger = Logger.getLogger(Log4JTest.class);
 
-	public static String process(HttpServletRequest request) throws IOException {
+	public static boolean process(HttpServletRequest request) throws IOException {
 		
 		UsersService userService = new UsersService();
 		ObjectMapper mapper = new ObjectMapper();
@@ -25,18 +25,25 @@ public class ValidationHelper {
 		case "/Project1/username.validate": 
 			String username = mapper.readValue(request.getInputStream(), String.class);
 			
-			if(userService.isUsernameAvailable(username)) return null;
-			else return username;
+			if(userService.isUsernameAvailable(username)) {
+				return true;
+			}else {
+				return false;
+			}
+			
 			
 		case "/Project1/email.validate":
 			logger.debug("enetered email validation");
 			String emailAddress = mapper.readValue(request.getInputStream(), String.class);
 			
-			if(userService.isEmailAvailable(emailAddress)) return null;
-			else return emailAddress;
+			if(userService.isEmailAvailable(emailAddress)) {
+				return true;
+			}else {
+				return false;
+			}
 			
 		default:
-			return null;
+			return false;
 		}
 	}
 }
