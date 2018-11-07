@@ -1,8 +1,7 @@
 window.onload = function() {
 	loadLogin();
 	document.getElementById('toLogin').addEventListener('click', loadLogin);
-	document.getElementById('toRegister').addEventListener('click',
-			loadRegister);
+	document.getElementById('toRegister').addEventListener('click', loadRegister);
 
 	document.getElementById('toProfile').addEventListener('click', loadProfile);
 	document.getElementById('toLogout').addEventListener('click', logout);
@@ -18,8 +17,8 @@ window.onload = function() {
 function login() {
 	console.log('in login()');
 
-	let username = $('#login-username').val();
-	let password = $('#login-password').val();
+	let username = document.getElementById('login-username').value;
+	let password = document.getElementById('login-password').value;
 
 	let credentials = [ username, password ];
 	let credentialsJSON = JSON.stringify(credentials);
@@ -187,6 +186,7 @@ function loadManagerViewRequestsInfo(statusId) {
 				addRows(ticketData);
 				errorRequestsMessage.removeAttribute('hidden');
 				errorRequestsMessage.innerHTML = 'No pending reimbursements';
+				
 			}
 		}
 	}

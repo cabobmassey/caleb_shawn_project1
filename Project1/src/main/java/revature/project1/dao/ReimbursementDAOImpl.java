@@ -3,7 +3,6 @@ package revature.project1.dao;
 import java.sql.Blob;
 import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,10 +10,15 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
+import org.apache.log4j.Logger;
+
+import revature.project1.models.Log4JTest;
 import revature.project1.models.Reimbursement;
 import revature.project1.utils.ConnectionFactory;
 
 public class ReimbursementDAOImpl implements ReimbursementDAO {
+	
+	final static Logger logger = Logger.getLogger(Log4JTest.class);
 
 	@Override
 	public ArrayList<Reimbursement> viewPastTickets(int authorId) {
@@ -52,11 +56,12 @@ public class ReimbursementDAOImpl implements ReimbursementDAO {
 			}
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("SQL Exception : " + e);
 		}
 		return requests;
 
 	}
+	
 
 	@Override
 	public boolean addReimbursementRequest(double amount, Timestamp date_submitted, Timestamp date_resolved,
@@ -91,7 +96,7 @@ public class ReimbursementDAOImpl implements ReimbursementDAO {
 			conn.close();
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("SQL Exception : " + e);
 		}
 
 		return true;
@@ -130,7 +135,7 @@ public class ReimbursementDAOImpl implements ReimbursementDAO {
 			}
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("SQL Exception : " + e);
 		}
 
 		return requests;
@@ -154,8 +159,7 @@ public class ReimbursementDAOImpl implements ReimbursementDAO {
 			conn.commit();
 			conn.close();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("SQL Exception : " + e);
 		}
 	}
 
@@ -197,7 +201,7 @@ public class ReimbursementDAOImpl implements ReimbursementDAO {
 			}
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("SQL Exception : " + e);
 		}
 		return requests;
 	}
