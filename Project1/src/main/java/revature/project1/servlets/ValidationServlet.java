@@ -9,17 +9,23 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import revature.project1.models.Log4JTest;
 import revature.project1.utils.ValidationHelper;
 
 @WebServlet("*.validate")
 public class ValidationServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
+	
+	final static Logger logger = Logger.getLogger(Log4JTest.class);
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("Request sent to front controller, ValidationServlet.doPost()");
+		logger.info("Request sent to ValidationServlet.doPost()");
 		
 		String validatedInput = ValidationHelper.process(request);
 		

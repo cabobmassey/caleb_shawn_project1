@@ -4,12 +4,20 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import org.apache.log4j.Logger;
+
+import revature.project1.models.Log4JTest;
 import revature.project1.models.Users;
 import revature.project1.utils.ConnectionFactory;
 
 public class UserDAOImpl implements UserDAO {
+	
+	final static Logger logger = Logger.getLogger(Log4JTest.class);
+	
 	@Override
 	public Users login(String username, String password) {
+		
 		Users existingUser = null;
 
 		try (Connection conn = ConnectionFactory.getInstance().getConnection();) {
@@ -49,7 +57,7 @@ public class UserDAOImpl implements UserDAO {
 			conn.commit();
 			conn.close();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("SQL Exception : " + e);
 		}
 		return existingUser;
 	}
@@ -71,7 +79,7 @@ public class UserDAOImpl implements UserDAO {
 			conn.close();
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("SQL Exception : " + e);
 		}
 
 		return userId;
@@ -118,7 +126,7 @@ public class UserDAOImpl implements UserDAO {
 			conn.close();
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("SQL Exception : " + e);
 		}
 
 		return true;
@@ -139,7 +147,7 @@ public class UserDAOImpl implements UserDAO {
 			conn.close();
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("SQL Exception : " + e);
 		}
 
 		return true;
@@ -163,7 +171,7 @@ public class UserDAOImpl implements UserDAO {
 			conn.close();
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("SQL Exception : " + e);
 		}
 
 		return true;
@@ -188,7 +196,7 @@ public class UserDAOImpl implements UserDAO {
 			conn.close();
 
 		} catch (SQLException e) {
-			e.printStackTrace();
+			logger.error("SQL Exception : " + e);
 		}
 
 		return true;

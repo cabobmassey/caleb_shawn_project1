@@ -8,9 +8,15 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
+import org.apache.log4j.Logger;
+
+import revature.project1.models.Log4JTest;
+
 public class ConnectionFactory {
     private static ConnectionFactory cf;
     private static boolean build = true;
+    
+    final static Logger logger = Logger.getLogger(Log4JTest.class);
     
     private ConnectionFactory() {
         build = false;
@@ -38,13 +44,13 @@ public class ConnectionFactory {
                     prop.getProperty("pw"));
             
         } catch (SQLException sqle) {
-            sqle.printStackTrace();
+        	logger.error("SQL Exception : " + sqle);
         } catch (FileNotFoundException fnfe) {
-            fnfe.printStackTrace();
+        	logger.error("File Not Found Exception : " + fnfe);
         } catch (IOException ioe) {
-            ioe.printStackTrace();
+        	logger.error("IOException : " + ioe);
         } catch (ClassNotFoundException e) {
-			e.printStackTrace();
+        	logger.error("Class Not Found Exception : " + e);
 		}
         
         return conn;
