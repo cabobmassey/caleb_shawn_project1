@@ -196,7 +196,6 @@ function loadManagerViewRequestsInfo(statusId) {
 }
 
 function addRows(ticketData){
-	
 	let userJSON = window.localStorage.getItem('user');
 	let user = JSON.parse(userJSON);
 	 
@@ -209,8 +208,6 @@ function addRows(ticketData){
 			resolverTable.appendChild(newResolverTableBody);
 	}
 	 
-	 
-		
 	for (let i = 0; i < ticketData.length; i++){
 		// dynamically create table row and data cells
 	    let row = document.createElement('tr');
@@ -240,26 +237,28 @@ function addRows(ticketData){
 	    row.appendChild(actionCell);
 	    
 	    
-	    if(ticketData[i].reimb_status_id == 1 && user.userRoleId == 2){
-	    	let approveBtn = document.createElement('button');
-	    	let denyBtn = document.createElement('button');
-	    	approveBtn.className = 'btn btn-success btn-sm';
-	    	denyBtn.className = 'btn btn-danger btn-sm';
-	    	approveBtn.innerHTML = 'Approve';
-	    	denyBtn.innerHTML = 'Deny';
-	    	approveBtn.addEventListener('click', function(e){
-	    		changeStatus(ticketData[i].reimb_id, 2, user.userRoleId, e, denyBtn);
-	    	});
-	    	
-	    	denyBtn.addEventListener('click', function(e){
-	    		changeStatus(ticketData[i].reimb_id, 3, user.userRoleId, e, approveBtn);
-	    	});
-	    	
-	    	actionCell.appendChild(approveBtn);
-	    	actionCell.appendChild(denyBtn);
-	    	
-	    } else {
-	    	actionCell.innerText = 'Already processed';
+	    if (ticketData[i].reimb_author != user.userId && user.userRoleId == 2){
+	    	 if(ticketData[i].reimb_status_id == 1){
+	 	    	let approveBtn = document.createElement('button');
+	 	    	let denyBtn = document.createElement('button');
+	 	    	approveBtn.className = 'btn btn-success btn-sm';
+	 	    	denyBtn.className = 'btn btn-danger btn-sm';
+	 	    	approveBtn.innerHTML = 'Approve';
+	 	    	denyBtn.innerHTML = 'Deny';
+	 	    	approveBtn.addEventListener('click', function(e){
+	 	    		changeStatus(ticketData[i].reimb_id, 2, user.userId, e, denyBtn);
+	 	    	});
+	 	    	
+	 	    	denyBtn.addEventListener('click', function(e){
+	 	    		changeStatus(ticketData[i].reimb_id, 3, user.userId, e, approveBtn);
+	 	    	});
+	 	    	
+	 	    	actionCell.appendChild(approveBtn);
+	 	    	actionCell.appendChild(denyBtn);
+	 	    	
+	 	    } else {
+	 	    	actionCell.innerText = 'Already processed';
+	 	    }
 	    }
 	    
 	    let tbody;
