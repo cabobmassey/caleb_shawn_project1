@@ -199,6 +199,8 @@ function addRows(ticketData){
 	
 	let userJSON = window.localStorage.getItem('user');
 	let user = JSON.parse(userJSON);
+	let subDate = new Date(0);
+	let resDate = new Date(0);
 	 
 	if(user.userRoleId == 2){
 			const resolverTable = document.getElementById('resolver-view-table');
@@ -274,9 +276,11 @@ function addRows(ticketData){
 	    tbody.appendChild(row);
 	    
 	    reimbIdCell.innerText = ticketData[i].reimb_id;
-	    reimbAmountCell.innerText = ticketData[i].reimb_amount;
-	    reimbSubmittedCell.innerText = ticketData[i].reimb_submitted;
-	    reimbResolvedCell.innerText = ticketData[i].reimb_resolved;
+	    reimbAmountCell.innerText =  ticketData[i].reimb_amount;
+	    subDate.setUTCSeconds(ticketData[i].reimb_submitted);
+	    reimbSubmittedCell.innerText = subDate;
+	    resDate.setUTCSeconds(ticketData[i].reimb_resolved);
+	    reimbResolvedCell.innerText = resDate;
 	    if (ticketData[i].reimb_description != null){
 	    	 reimbDescriptionCell.innerText = ticketData[i].reimb_description;
 	    }else{
