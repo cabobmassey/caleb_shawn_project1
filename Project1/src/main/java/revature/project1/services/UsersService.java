@@ -21,10 +21,15 @@ public class UsersService {
 			int roleId) {
 		boolean createdUser = false;
 		if (checkIfValidRole(roleId)) {
-			createdUser = userDAO.createUser(username, password, firstname, lastname, email, roleId);
-		} else {
+			if (isEmailAvailable(email)) {
+				if (isUsernameAvailable(username)) {
+					createdUser = userDAO.createUser(username, password, firstname, lastname, email, roleId);
+				}
+			}
+		}else{
 			return false;
 		}
+
 		return createdUser;
 	}
 
