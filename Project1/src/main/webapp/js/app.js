@@ -38,8 +38,8 @@ function login() {
 				window.localStorage.setItem('user', xhr.responseText);
 				loadHome(user.userRoleId);
 			} else {
-				$('#login-message').show();
-				$('#login-message').html('Invalid Credentials');
+				document.getElementById('login-message').style.display = 'block';
+				document.getElementById('login-message').innerHTML = 'Invalid Credentials';
 			}
 		}
 	}
@@ -77,19 +77,21 @@ function loadResolverHomeInfo() {
 	console.log('in loadResolverHomeInfo()');
 	let userJSON = window.localStorage.getItem('user');
 	let user = JSON.parse(userJSON);
+	document.getElementById('user_fn').innerHTML = user.firstName;
 	
-	$('#submit-new-req-btn').click(loadCreateTicket);
-	$('#view-pending-btn').click(loadManagerViewRequests);
+	document.getElementById('submit-new-req-btn').addEventListener('click', loadCreateTicket);
+	document.getElementById('view-pending-btn').addEventListener('click', loadManagerViewRequests);
 }
 
 function loadAuthorHomeInfo() {
 	console.log('in loadAuthorHomeInfo()');
 	let userJSON = window.localStorage.getItem('user');
 	let user = JSON.parse(userJSON);
-	$('#user_fn').html(user.firstName);
+	document.getElementById('user_fn').innerHTML = user.firstName;
 	
-	$('#submit-new-req-btn').click(loadCreateTicket);
-	$('#req-history-btn').click(loadViewPastRequests);
+	document.getElementById('submit-new-req-btn').addEventListener('click', loadCreateTicket);
+	document.getElementById('req-history-btn').addEventListener('click', loadViewPastRequests);
+	
 }
 
 function loadViewPastRequests(){
@@ -191,7 +193,7 @@ function loadManagerViewRequestsInfo(statusId) {
 		}
 	}
 	
-	$('#resolver-return-home').click(function(){loadHome(user.userRoleId)});
+	document.getElementById('resolver-return-home').addEventListener('click', function(){loadHome(user.userRoleId)});
 	
 }
 
@@ -348,7 +350,7 @@ function loadViewPastRequestsInfo() {
 	let user = JSON.parse(userJSON);
 	let authorId = user.userId;
 	let authorIdJSON = JSON.stringify(authorId);
-	$('#user_fn').html(user.firstName);
+	document.getElementById('user_fn').innerHTML = user.firstName;
 	
 	let xhr = new XMLHttpRequest();
 
@@ -370,7 +372,7 @@ function loadViewPastRequestsInfo() {
 		}
 	}
 	
-	$('#author-return-home').click(function(){loadHome(user.userRoleId)});
+	document.getElementById('author-return-home').addEventListener('click', function(){loadHome(user.userRoleId)});
 	
 }
 
@@ -402,22 +404,22 @@ function loadLogin() {
 function loadLoginInfo() {
 	console.log('in loadLoginInfo()');
 
-	$('#login-message').hide();
-	$('#login').on('click', login);
-	$('#toRegisterBtn').on('click', loadRegister);
+	document.getElementById('login-message').style.display = 'none';
+	document.getElementById('login').addEventListener('click', login);
+	document.getElementById('toRegisterBtn').addEventListener('click', loadRegister);
 }
 
 function register() {
 	console.log('in register()');
 	
-	$('#register').attr('disabled', true);
-	let roleId = checkRoleId();
+	document.getElementById('register').setAttribute('disabled', true);
+;	let roleId = checkRoleId();
 	let user = {
-		firstName : $('#fn').val(),
-		lastName : $('#ln').val(),
-		email : $('#email').val(),
-		username : $('#reg-username').val(),
-		password : $('#reg-password').val(),
+		firstName : document.getElementById('fn').value,
+		lastName : document.getElementById('ln').value,
+		email : document.getElementById('email').value,
+		username : document.getElementById('reg-username').value,
+		password : document.getElementById('reg-password').value,
 		userRoleId : roleId
 	}
 	
@@ -432,10 +434,11 @@ function register() {
 		if(xhr.readyState == 4 && xhr.status == 200) {
 			
 			if(xhr.responseText == 'false') {
-				$('#reg-message').show().html('Something went wrong...');
+				document.getElementById('reg-message').innerHTML = 'Something went wrong...';
+				document.getElementById('reg-message').style.display = 'block';
 			} else  {
-				$('#register').attr('disabled', false);
-				$('#reg-message').hide();
+				document.getElementById('register').removeAttribute('disabled');
+				document.getElementById('reg-message').style.display = 'none';
 				alert('Enrollment successful! Please login using your credentials.');
 				loadLogin();
 			}
@@ -464,28 +467,33 @@ let isAuth = isAuthenticated();
 }
 
 function loadCreateTicketInfo() {
+	console.log('in loadCreateTicketInfo()');
 	let userJSON = window.localStorage.getItem('user');
 	let user = JSON.parse(userJSON);
-	$('#submit-request').attr('disabled', true);
+	document.getElementById('submit-request').setAttribute('disabled', true);
 	
-	$('#amount').blur(isCreateTicketFormValid);
-	$('#description-input').blur(isCreateTicketFormValid);
-	$('#type-input').blur(isCreateTicketFormValid);
+	document.getElementById('amount').addEventListener('blur', isCreateTicketFormValid);
+	document.getElementById('description-input').addEventListener('blur', isCreateTicketFormValid);
+	document.getElementById('type-input').addEventListener('blur', isCreateTicketFormValid);
 
-	
-	$('#submit-request').click(createTicket);
-	$('#author-return-home_Create_Reimb').click(function() {loadHome(user.userRoleId)});
+	document.getElementById('submit-request').addEventListener('click', createTicket);
+	document.getElementById('author-return-home_Create_Reimb').addEventListener('click', function() {loadHome(user.userRoleId)});
 
 }
 
 function isCreateTicketFormValid() {
+	console.log('in isCreateFormValid()');
 	
-	let form = [ $('#amount').val(), $('#description-input').val(), $('#type-input').val()];
+	let form = [(document.getElementById('amount').value), (document.getElementById('description-input').value), (document.getElementById('type-input').value)];
 
-	if (!(form[0] && form[2]) )
-		$('#submit-request').attr('disabled', true);
-	else
-		$('#submit-request').attr('disabled', false);
+	if (!(form[0] && form[2]) ){
+		console.log('disabled');
+		document.getElementById('submit-request').setAttribute('disabled', true);
+	}
+	else{
+		console.log('enabled');
+		document.getElementById('submit-request').removeAttribute('disabled');
+	}
 }
 
 function createTicket() {
@@ -494,10 +502,10 @@ function createTicket() {
 	let user = JSON.parse(userJSON);
 	let typeId = checkTypeId();
 	let request = {
-			reimb_amount: $('#amount').val(),
+			reimb_amount: document.getElementById('amount').value,
 			reimb_submitted: new Date().toUTCString(),
 			reimb_resolved: null,
-			reimb_description: $('#description-input').val(),
+			reimb_description: document.getElementById('description-input').value,
 			reimb_receipt: null,
 			reimb_author: user.userId,
 			reimb_status_id: 1,
@@ -513,17 +521,17 @@ function createTicket() {
 
 	xhr.onreadystatechange = function() {
 		if(xhr.readyState == 4 && xhr.status == 200) {
-			$('#submit-request').attr('disabled', true);
-			$('#amount').attr('disabled', true);
-			$('#description-input').attr('disabled', true);
-			$('#type-input').attr('disabled', true);
+			document.getElementById('submit-request').setAttribute('disabled', true);
+			document.getElementById('amount').setAttribute('disabled', true);
+			document.getElementById('description-input').setAttribute('disabled', true);
+			document.getElementById('type-input').setAttribute('disabled', true);
 			if(xhr.responseText == 'false') {
 				alert("Reimbursement Request NOT Successful")
 				loadHome(user.userRoleId);
 				
 			} else if (xhr.responseText == 'true')  {
 				alert("Reimbursement Request Successful");
-				$('#submit-request').attr('disabled', true);
+				document.getElementById('submit-request').setAttribute('disabled', true);
 				loadHome(user.userRoleId);
 			}
 		}
@@ -532,13 +540,13 @@ function createTicket() {
 
 function checkTypeId() {
 	let typeId = 0;
-	if ($('#type-input').val() === 'Lodging') {
+	if ((document.getElementById('type-input').value) === 'Lodging') {
 		typeId = 1;
-	} else if ($('#type-input').val() === 'Travel') {
+	} else if ((document.getElementById('type-input').value) === 'Travel') {
 		typeId = 2;
-	} else if ($('#type-input').val() === 'Food') {
+	} else if ((document.getElementById('type-input').value) === 'Food') {
 		typeId = 3;
-	} else if ($('#type-input').val() === 'Other') {
+	} else if ((document.getElementById('type-input').value) === 'Other') {
 		typeId = 4;
 	}
 	return typeId;
@@ -546,9 +554,9 @@ function checkTypeId() {
 
 function checkRoleId() {
 	let roleId = 0;
-	if ($('#user-role').val() === 'Author') {
+	if ((document.getElementById('user-role').value) === 'Author') {
 		roleId = 1;
-	} else if ($('#user-role').val() === 'Resolver') {
+	} else if ((document.getElementById('user-role').value) === 'Resolver') {
 		roleId = 2;
 	}
 	return roleId;
@@ -558,19 +566,17 @@ function updateNav(isAuth) {
 	console.log('in updateNav()');
 
 	if (isAuth) {
-		$('#toLogin').attr('hidden', true);
-		$('#toRegister').attr('hidden', true);
+		document.getElementById('toLogin').setAttribute('hidden', true);
+		document.getElementById('toRegister').setAttribute('hidden', true);
 
-		$('#toHome').attr('hidden', false);
-		$('#toProfile').attr('hidden', false);
-		$('#toLogout').attr('hidden', false);
+		document.getElementById('toProfile').removeAttribute('hidden');
+		document.getElementById('toLogout').removeAttribute('hidden');
 	} else {
-		$('#toLogin').attr('hidden', false);
-		$('#toRegister').attr('hidden', false);
+		document.getElementById('toLogin').removeAttribute('hidden');
+		document.getElementById('toRegister').removeAttribute('hidden');
 
-		$('#toHome').attr('hidden', true);
-		$('#toProfile').attr('hidden', true);
-		$('#toLogout').attr('hidden', true);
+		document.getElementById('toProfile').setAttribute('hidden', true);
+		document.getElementById('toLogout').setAttribute('hidden', true);
 	}
 }
 
@@ -620,20 +626,20 @@ function loadRegister() {
 
 function loadRegisterInfo() {
 	console.log('in loadRegisterInfo()');
-	$('#register').attr('disabled', true);
-	$('#register').on('click', register);
-	$('#reg-message').hide();
+	document.getElementById('register').setAttribute('disabled', true);
+	
+	document.getElementById('register').addEventListener('click', register);
+	document.getElementById('reg-message').style.display = 'none';
 
-	$('#fn').blur(isRegisterFormValid);
-	$('#ln').blur(isRegisterFormValid);
-	$('#email').blur(isRegisterFormValid);
-	$('#reg-username').blur(isRegisterFormValid);
-	$('#reg-password').blur(isRegisterFormValid);
+	document.getElementById('fn').addEventListener('blur', isRegisterFormValid);
+	document.getElementById('ln').addEventListener('blur', isRegisterFormValid);
+	document.getElementById('email').addEventListener('blur', isRegisterFormValid);
+	document.getElementById('reg-username').addEventListener('blur', isRegisterFormValid);
+	document.getElementById('reg-password').addEventListener('blur', isRegisterFormValid);
 
-	$('#reg-username').blur(validateUsername); // same as
-												// document.getElementById('reg-username').addEventListener('blur',
-												// function, boolean);
-	$('#email').blur(validateEmail);
+	document.getElementById('reg-username').addEventListener('blur', validateUsername);
+	document.getElementById('email').addEventListener('blur', validateEmail);
+	
 
 }
 
@@ -661,7 +667,7 @@ function isRegisterFormValid() {
 function validateUsername() {
 	console.log('in validateUsername()');
 
-	let username = $('#reg-username').val();
+	let username = document.getElementById('reg-username').value;
 	console.log(username);
 	
 	if (username) {
@@ -677,11 +683,11 @@ function validateUsername() {
 				console.log(xhr.responseText);
 				let username = JSON.parse(xhr.responseText);
 				if (!username) {
-					$('#reg-message').show();
-					$('#reg-message').html('Username is already in use! Please try another!');
+					document.getElementById('reg-message').style.display = 'block';
+					document.getElementById('reg-message').innerHTML = 'Username is already in use! Please try another!';
 				} else {
 					vUsername = true;
-					$('#reg-message').hide();
+					document.getElementById('reg-message').style.display = 'none';
 				}
 
 			}
@@ -704,7 +710,7 @@ function validEmailFormat(){
 function validateEmail() {
 	console.log('in validateEmail()');
 
-	let email = $('#email').val();
+	let email = document.getElementById('email').value;
 	if (email) {
 		let emailJSON = JSON.stringify(email);
 		let xhr = new XMLHttpRequest();
@@ -718,14 +724,14 @@ function validateEmail() {
 				console.log(xhr.responseText);
 				let email = JSON.parse(xhr.responseText);
 				if (!validEmailFormat()){
-					$('#reg-message').show();
-					$('#reg-message').html('Please enter a valid email');
+					document.getElementById('reg-message').style.display = 'block';
+					document.getElementById('reg-message').innerHTML = 'Please Enter A Valid Email.';
 				}else if (!email && validEmailFormat()) {
-					$('#reg-message').show();
-					$('#reg-message').html('Email is already in use! Please try another!');
+					document.getElementById('reg-message').style.display = 'block';
+					document.getElementById('reg-message').innerHTML = 'Email Is Already In Use. Please Try Another.';
 				} else {
 					vEmail = true;
-					$('#reg-message').hide();
+					document.getElementById('reg-message').style.display = 'none';
 				}
 			}
 		}
